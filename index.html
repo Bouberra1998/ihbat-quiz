@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مقياس الإحباطات — من السيرة النبوية</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0f14;
+  --surface: #161920;
+  --surface2: #1e2230;
+  --border: rgba(255,255,255,0.07);
+  --text: #f0eeea;
+  --muted: #7a7f8e;
+  --accent: #c9a96e;
+  --accent2: #8b6fd4;
+  --blue: #5b8dee;
+  --teal: #2ec4a3;
+  --coral: #e07b5c;
+  --pink: #d4658a;
+  --green: #5db87a;
+  --gold: #d4a843;
+  --r: 12px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Tajawal', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Background pattern */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse 60% 40% at 20% 20%, rgba(139,111,212,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 80% 80%, rgba(201,169,110,0.06) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container { max-width: 780px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+
+/* ── SCREENS ── */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* ── INTRO SCREEN ── */
+#intro {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.intro-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(201,169,110,0.12);
+  border: 1px solid rgba(201,169,110,0.3);
+  color: var(--accent);
+  font-size: 13px;
+  padding: 6px 16px;
+  border-radius: 100px;
+  margin-bottom: 28px;
+  animation: fadeUp 0.6s ease both;
+}
+
+.intro-title {
+  font-size: clamp(32px, 6vw, 52px);
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 16px;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+
+.intro-title span {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.intro-sub {
+  font-size: 16px;
+  color: var(--muted);
+  line-height: 1.8;
+  max-width: 500px;
+  margin: 0 auto 40px;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+
+.types-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 40px;
+  animation: fadeUp 0.6s 0.3s ease both;
+}
+
+.type-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 16px;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.type-icon {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.type-name { font-size: 13px; font-weight: 700; color: var(--text); }
+.type-desc { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+.t1 .type-icon { background: rgba(91,141,238,0.15); }
+.t2 .type-icon { background: rgba(139,111,212,0.15); }
+.t3 .type-icon { background: rgba(212,168,67,0.15); }
+.t4 .type-icon { background: rgba(212,101,138,0.15); }
+
+.start-btn {
+  background: linear-gradient(135deg, var(--accent), #a8813d);
+  color: #1a0f00;
+  border: none;
+  padding: 16px 48px;
+  border-radius: 100px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  animation: fadeUp 0.6s 0.4s ease both;
+}
+.start-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,169,110,0.35); }
+
+.intro-note {
+  margin-top: 20px;
+  font-size: 12px;
+  color: var(--muted);
+  animation: fadeUp 0.6s 0.5s ease both;
+}
+
+/* ── QUIZ SCREEN ── */
+#quiz { padding: 30px 20px; }
+
+.quiz-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.quiz-logo { font-size: 14px; font-weight: 700; color: var(--accent); }
+
+.progress-wrap { flex: 1; margin: 0 20px; }
+.progress-bar-bg {
+  height: 4px;
+  background: var(--surface2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent2), var(--accent));
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+.q-counter { font-size: 13px; color: var(--muted); white-space: nowrap; }
+
+.section-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 100px;
+  margin-bottom: 20px;
+}
+
+.q-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 16px;
+  animation: slideIn 0.35s ease;
+}
+
+.q-text {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+
+.q-ref {
+  font-size: 11px;
+  color: var(--muted);
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.choices { display: flex; flex-direction: column; gap: 10px; }
+
+.choice-btn {
+  background: var(--surface2);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  text-align: right;
+  cursor: pointer;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.choice-btn:hover {
+  border-color: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.05);
+  transform: translateX(-3px);
+}
+
+.choice-btn.selected {
+  border-color: var(--accent);
+  background: rgba(201,169,110,0.12);
+}
+
+.choice-label {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.choice-btn.selected .choice-label {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #1a0f00;
+}
+
+.choice-text { flex: 1; line-height: 1.5; }
+
+.nav-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.nav-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 12px 28px;
+  border-radius: 100px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.nav-btn:hover { background: var(--surface2); }
+.nav-btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #1a0f00;
+  font-weight: 800;
+}
+.nav-btn.primary:hover { opacity: 0.9; transform: translateY(-1px); }
+.nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ── RESULT SCREEN ── */
+#result { padding: 40px 20px 60px; }
+
+.result-header { text-align: center; margin-bottom: 36px; }
+
+.result-badge {
+  display: inline-block;
+  background: rgba(201,169,110,0.12);
+  border: 1px solid rgba(201,169,110,0.3);
+  color: var(--accent);
+  font-size: 12px;
+  padding: 5px 16px;
+  border-radius: 100px;
+  margin-bottom: 16px;
+}
+
+.result-title { font-size: 28px; font-weight: 900; margin-bottom: 8px; }
+.result-sub { font-size: 14px; color: var(--muted); }
+
+/* Score donut */
+.score-section {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.donut-wrap { position: relative; flex-shrink: 0; }
+.donut-wrap svg { transform: rotate(-90deg); }
+.donut-center {
+  position: absolute;
+  inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.donut-pct { font-size: 26px; font-weight: 900; color: var(--accent); }
+.donut-label { font-size: 10px; color: var(--muted); }
+
+.score-info h3 { font-size: 20px; font-weight: 800; margin-bottom: 6px; }
+.score-info p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+/* 4 types bars */
+.types-result { margin-bottom: 24px; }
+.types-result h4 { font-size: 15px; font-weight: 700; margin-bottom: 14px; color: var(--muted); }
+
+.type-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.type-row-name { font-size: 13px; font-weight: 600; min-width: 120px; text-align: right; }
+.type-bar-bg { flex: 1; height: 8px; background: var(--surface2); border-radius: 4px; overflow: hidden; }
+.type-bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease; }
+.type-row-pct { font-size: 12px; font-weight: 700; min-width: 36px; text-align: left; }
+
+/* Treatment card */
+.treatment-card {
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  border: 1px solid var(--border);
+}
+
+.treatment-head {
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.treatment-icon {
+  width: 44px; height: 44px;
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.treatment-head-text h3 { font-size: 17px; font-weight: 800; }
+.treatment-head-text p { font-size: 12px; opacity: 0.7; margin-top: 2px; }
+
+.treatment-body { padding: 20px 24px; background: var(--surface); }
+
+.aya-box {
+  background: var(--bg);
+  border-right: 3px solid var(--accent);
+  padding: 12px 16px;
+  border-radius: 0 8px 8px 0;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--accent);
+  margin: 14px 0;
+  font-weight: 600;
+}
+
+.treatment-text {
+  font-size: 14px;
+  line-height: 1.85;
+  color: rgba(240,238,234,0.85);
+  margin-bottom: 16px;
+}
+
+.steps { display: flex; flex-direction: column; gap: 10px; }
+.step-item {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.step-num {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  font-weight: 800;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.step-text { font-size: 13px; line-height: 1.7; color: rgba(240,238,234,0.8); }
+
+.src-tag { font-size: 11px; color: var(--muted); margin-top: 14px; }
+
+/* Restart */
+.restart-btn {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 14px;
+  border-radius: 100px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+.restart-btn:hover { background: var(--surface2); }
+
+.share-row { display: flex; gap: 10px; margin-bottom: 12px; }
+.share-btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-family: 'Tajawal', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.share-btn:hover { background: var(--surface2); }
+
+/* Animations */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .types-grid { grid-template-columns: 1fr; }
+  .score-section { flex-direction: column; text-align: center; }
+  .type-row-name { min-width: 90px; font-size: 12px; }
+  .q-text { font-size: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ INTRO ══ -->
+<div id="intro" class="screen active">
+  <div class="container">
+    <div class="intro-badge">📖 من السيرة النبوية المكية</div>
+    <h1 class="intro-title">اكتشف نوع <span>إحباطك</span><br>وعلاجه من القرآن</h1>
+    <p class="intro-sub">20 سؤالاً تقيس مستوى الإحباط لديك وفق الرباعية الإحباطية المستخرجة من السيرة النبوية — ثم يقدم لك العلاج من منهج القرآن الكريم مباشرة</p>
+
+    <div class="types-grid">
+      <div class="type-card t1">
+        <div class="type-icon">🧠</div>
+        <div>
+          <div class="type-name">الإحباط الفكري</div>
+          <div class="type-desc">تشكيك في صحة المنهج</div>
+        </div>
+      </div>
+      <div class="type-card t2">
+        <div class="type-icon">💔</div>
+        <div>
+          <div class="type-name">الإحباط النفسي</div>
+          <div class="type-desc">هز الثقة بالنفس</div>
+        </div>
+      </div>
+      <div class="type-card t3">
+        <div class="type-icon">⚡</div>
+        <div>
+          <div class="type-name">الإحباط المادي</div>
+          <div class="type-desc">المصائب المتتالية</div>
+        </div>
+      </div>
+      <div class="type-card t4">
+        <div class="type-icon">👥</div>
+        <div>
+          <div class="type-name">الإحباط الخاص</div>
+          <div class="type-desc">الضغط الاجتماعي</div>
+        </div>
+      </div>
+    </div>
+
+    <button class="start-btn" onclick="startQuiz()">ابدأ الاختبار الآن</button>
+    <p class="intro-note">5 دقائق فقط — أداة توعوية وليست تشخيصاً نفسياً طبياً</p>
+  </div>
+</div>
+
+<!-- ══ REGISTER ══ -->
+<div id="register" class="screen">
+<style>
+.reg-wrap{max-width:500px;margin:0 auto;padding:36px 20px 60px}
+.reg-result-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px 20px;margin-bottom:28px;display:flex;align-items:center;gap:16px}
+.reg-donut{flex-shrink:0}
+.reg-result-info h3{font-size:17px;font-weight:800;margin-bottom:4px}
+.reg-result-info p{font-size:12px;color:var(--muted);margin-bottom:10px}
+.reg-type-bars{display:flex;flex-direction:column;gap:5px}
+.reg-type-row{display:flex;align-items:center;gap:8px}
+.reg-type-name{font-size:11px;color:var(--muted);min-width:72px;text-align:right}
+.reg-type-bg{flex:1;height:5px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden}
+.reg-type-fill{height:100%;border-radius:3px}
+.reg-step-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.reg-step-dots{display:flex;gap:6px}
+.reg-step-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:all .3s}
+.reg-step-dot.active{background:var(--accent);width:24px;border-radius:4px}
+.reg-step-dot.done{background:var(--accent);opacity:0.5}
+.reg-step-title{font-size:13px;color:var(--muted)}
+.reg-field-label{display:block;font-size:12px;color:var(--muted);margin-bottom:7px;font-weight:600;letter-spacing:.3px}
+.reg-input{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:13px 16px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:15px;outline:none;direction:rtl;transition:border-color .2s}
+.reg-input:focus{border-color:var(--accent)}
+.reg-select{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:13px 14px;color:var(--text);font-family:'Tajawal',sans-serif;font-size:14px;outline:none;direction:rtl;cursor:pointer;transition:border-color .2s;appearance:none}
+.reg-select:focus{border-color:var(--accent)}
+.sel-card{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:0;cursor:pointer;transition:all .2s;font-family:'Tajawal',sans-serif;text-align:center;color:var(--muted)}
+.sel-card:hover{border-color:rgba(201,169,110,0.4);background:rgba(201,169,110,0.05)}
+.sel-card.active-gender{border-color:var(--accent);color:var(--accent);background:rgba(201,169,110,0.1)}
+.sel-card.active-level{border-color:var(--accent2);color:var(--accent2);background:rgba(139,111,212,0.1)}
+.sel-card.active-goal{border-color:#2ec4a3;color:#2ec4a3;background:rgba(46,196,163,0.1)}
+.reg-panel{display:none;animation:fadeUp .3s ease}
+.reg-panel.show{display:flex;flex-direction:column;gap:16px}
+.reg-nav{display:flex;gap:10px;margin-top:8px}
+.reg-btn-next{flex:1;background:linear-gradient(135deg,var(--accent),#a8813d);color:#1a0f00;border:none;padding:14px;border-radius:100px;font-family:'Tajawal',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:transform .2s,opacity .2s}
+.reg-btn-next:hover{transform:translateY(-2px)}
+.reg-btn-next:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.reg-btn-back{background:var(--surface);border:1px solid var(--border);color:var(--muted);padding:14px 20px;border-radius:100px;font-family:'Tajawal',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s}
+.reg-btn-back:hover{background:var(--surface2)}
+.reg-error{display:none;color:#e07b5c;font-size:12px;text-align:center;padding:8px 12px;background:rgba(224,123,92,0.1);border-radius:8px}
+.reg-summary{background:var(--surface);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:4px}
+.reg-sum-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:0.5px solid var(--border);font-size:14px}
+.reg-sum-row:last-child{border-bottom:none}
+.reg-sum-label{color:var(--muted);font-size:12px}
+.reg-sum-val{font-weight:700;color:var(--text)}
+.reg-success{text-align:center;padding:20px 0}
+.reg-success-icon{font-size:48px;margin-bottom:12px;animation:fadeUp .5s .1s ease both}
+.reg-success-title{font-size:22px;font-weight:900;margin-bottom:8px;animation:fadeUp .5s .2s ease both}
+.reg-success-sub{font-size:14px;color:var(--muted);margin-bottom:24px;line-height:1.7;animation:fadeUp .5s .3s ease both}
+</style>
+
+<div class="reg-wrap">
+
+  <!-- نتيجة الاختبار مُدمجة في الأعلى -->
+  <div class="reg-result-card" id="regResultCard">
+    <div class="reg-donut">
+      <svg width="72" height="72" viewBox="0 0 72 72">
+        <circle cx="36" cy="36" r="28" fill="none" stroke="#1e2230" stroke-width="7"/>
+        <circle cx="36" cy="36" r="28" fill="none" stroke="url(#rg)" stroke-width="7"
+          stroke-linecap="round" id="regDonut" stroke-dasharray="175.9" stroke-dashoffset="175.9"
+          transform="rotate(-90 36 36)"/>
+        <defs><linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#8b6fd4"/><stop offset="100%" stop-color="#c9a96e"/>
+        </linearGradient></defs>
+      </svg>
+    </div>
+    <div class="reg-result-info" style="flex:1">
+      <h3 id="regLevelName">جارٍ التحميل...</h3>
+      <p id="regLevelSub">نتيجة اختبارك</p>
+      <div class="reg-type-bars">
+        <div class="reg-type-row"><span class="reg-type-name">🧠 فكري</span><div class="reg-type-bg"><div class="reg-type-fill" id="rb1" style="width:0%;background:#5b8dee"></div></div></div>
+        <div class="reg-type-row"><span class="reg-type-name">💔 نفسي</span><div class="reg-type-bg"><div class="reg-type-fill" id="rb2" style="width:0%;background:#8b6fd4"></div></div></div>
+        <div class="reg-type-row"><span class="reg-type-name">⚡ مادي</span><div class="reg-type-bg"><div class="reg-type-fill" id="rb3" style="width:0%;background:#d4a843"></div></div></div>
+        <div class="reg-type-row"><span class="reg-type-name">👥 خاص</span><div class="reg-type-bg"><div class="reg-type-fill" id="rb4" style="width:0%;background:#d4658a"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- خطوات التسجيل -->
+  <div class="reg-step-header">
+    <div class="reg-step-dots">
+      <div class="reg-step-dot active" id="dot1"></div>
+      <div class="reg-step-dot" id="dot2"></div>
+      <div class="reg-step-dot" id="dot3"></div>
+      <div class="reg-step-dot" id="dot4"></div>
+    </div>
+    <span class="reg-step-title" id="regStepTitle">الخطوة 1 من 4 — معلوماتك الأساسية</span>
+  </div>
+
+  <div id="reg-error" class="reg-error">يرجى تعبئة جميع الحقول للمتابعة</div>
+
+  <!-- الخطوة 1: المعلومات الأساسية -->
+  <div class="reg-panel show" id="regStep1">
+    <div>
+      <label class="reg-field-label">الاسم الأول</label>
+      <input id="reg-name" type="text" placeholder="محمد / فاطمة ..." maxlength="30" class="reg-input"
+        oninput="checkStep1()">
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div>
+        <label class="reg-field-label">الفئة العمرية</label>
+        <select id="reg-age" class="reg-select" onchange="checkStep1()">
+          <option value="">اختر...</option>
+          <option>16 - 18</option><option>19 - 22</option><option>23 - 26</option>
+          <option>27 - 30</option><option>31 - 35</option><option>35+</option>
+        </select>
+      </div>
+      <div>
+        <label class="reg-field-label">الجنس</label>
+        <div style="display:flex;gap:8px" id="gender-group">
+          <button onclick="selectGender(this,'ذكر')" class="sel-card" style="flex:1;padding:12px 8px;font-size:13px;font-weight:700">ذكر</button>
+          <button onclick="selectGender(this,'أنثى')" class="sel-card" style="flex:1;padding:12px 8px;font-size:13px;font-weight:700">أنثى</button>
+        </div>
+      </div>
+    </div>
+    <div class="reg-nav">
+      <button class="reg-btn-next" id="step1Btn" onclick="goStep(2)" disabled>التالي ←</button>
+    </div>
+  </div>
+
+  <!-- الخطوة 2: المستوى الديني -->
+  <div class="reg-panel" id="regStep2">
+    <div>
+      <label class="reg-field-label">مستواك الديني</label>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px" id="level-group">
+        <button onclick="selectLevel(this,'مبتدئ')" class="sel-card" style="padding:18px 8px;font-size:13px;font-weight:700">
+          <div style="font-size:22px;margin-bottom:6px">🌱</div>مبتدئ
+          <div style="font-size:10px;color:var(--muted);margin-top:4px">أبدأ الطريق</div>
+        </button>
+        <button onclick="selectLevel(this,'متوسط')" class="sel-card" style="padding:18px 8px;font-size:13px;font-weight:700">
+          <div style="font-size:22px;margin-bottom:6px">📖</div>متوسط
+          <div style="font-size:10px;color:var(--muted);margin-top:4px">في منتصف الطريق</div>
+        </button>
+        <button onclick="selectLevel(this,'متقدم')" class="sel-card" style="padding:18px 8px;font-size:13px;font-weight:700">
+          <div style="font-size:22px;margin-bottom:6px">⭐</div>متقدم
+          <div style="font-size:10px;color:var(--muted);margin-top:4px">داعية أو طالب علم</div>
+        </button>
+      </div>
+    </div>
+    <div class="reg-nav">
+      <button class="reg-btn-next" id="step2Btn" onclick="goStep(3)" disabled>التالي ←</button>
+      <button class="reg-btn-back" onclick="goStep(1)">→ رجوع</button>
+    </div>
+  </div>
+
+  <!-- الخطوة 3: الهدف -->
+  <div class="reg-panel" id="regStep3">
+    <div>
+      <label class="reg-field-label">ما هدفك من هذا التطبيق؟</label>
+      <div style="display:flex;flex-direction:column;gap:10px" id="goal-group">
+        <button onclick="selectGoal(this,'فهم نوع إحباطي وأسبابه')" class="sel-card" style="padding:14px 16px;text-align:right;display:flex;align-items:center;gap:12px;font-size:13px;font-weight:600">
+          <span style="font-size:18px">🔍</span>
+          <div><div>فهم نوع إحباطي وأسبابه</div><div style="font-size:11px;font-weight:400;margin-top:2px;color:var(--muted)">من منظور إسلامي أصيل</div></div>
+        </button>
+        <button onclick="selectGoal(this,'علاج الإحباط بمنهج القرآن')" class="sel-card" style="padding:14px 16px;text-align:right;display:flex;align-items:center;gap:12px;font-size:13px;font-weight:600">
+          <span style="font-size:18px">💊</span>
+          <div><div>علاج الإحباط الذي أعيشه</div><div style="font-size:11px;font-weight:400;margin-top:2px;color:var(--muted)">بمنهج القرآن والسيرة</div></div>
+        </button>
+        <button onclick="selectGoal(this,'مساعدة الآخرين في دعوتي')" class="sel-card" style="padding:14px 16px;text-align:right;display:flex;align-items:center;gap:12px;font-size:13px;font-weight:600">
+          <span style="font-size:18px">🤝</span>
+          <div><div>مساعدة الآخرين وتطوير دعوتي</div><div style="font-size:11px;font-weight:400;margin-top:2px;color:var(--muted)">داعية يحتاج أدوات عملية</div></div>
+        </button>
+      </div>
+    </div>
+    <div class="reg-nav">
+      <button class="reg-btn-next" id="step3Btn" onclick="goStep(4)" disabled>التالي ←</button>
+      <button class="reg-btn-back" onclick="goStep(2)">→ رجوع</button>
+    </div>
+  </div>
+
+  <!-- الخطوة 4: ملخص وتأكيد -->
+  <div class="reg-panel" id="regStep4">
+    <div>
+      <label class="reg-field-label" style="margin-bottom:10px">راجع بياناتك قبل البدء</label>
+      <div class="reg-summary">
+        <div class="reg-sum-row"><span class="reg-sum-label">الاسم</span><span class="reg-sum-val" id="sum-name">—</span></div>
+        <div class="reg-sum-row"><span class="reg-sum-label">العمر</span><span class="reg-sum-val" id="sum-age">—</span></div>
+        <div class="reg-sum-row"><span class="reg-sum-label">الجنس</span><span class="reg-sum-val" id="sum-gender">—</span></div>
+        <div class="reg-sum-row"><span class="reg-sum-label">المستوى الديني</span><span class="reg-sum-val" id="sum-level">—</span></div>
+        <div class="reg-sum-row"><span class="reg-sum-label">الهدف</span><span class="reg-sum-val" id="sum-goal" style="font-size:12px;max-width:200px;text-align:left">—</span></div>
+        <div class="reg-sum-row"><span class="reg-sum-label">نتيجة الاختبار</span><span class="reg-sum-val" id="sum-result" style="color:var(--accent)">—</span></div>
+        <div class="reg-sum-row"><span class="reg-sum-label">مسار الدروس الموصى به</span><span class="reg-sum-val" id="sum-path" style="font-size:12px">—</span></div>
+      </div>
+    </div>
+    <div style="background:rgba(201,169,110,0.08);border:1px solid rgba(201,169,110,0.2);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--muted);display:flex;gap:8px;align-items:flex-start">
+      <span style="color:var(--accent);flex-shrink:0;margin-top:1px">🔒</span>
+      <span>بياناتك محفوظة على جهازك فقط ولا ترسل لأي خادم. يمكنك حذفها في أي وقت.</span>
+    </div>
+    <div class="reg-nav">
+      <button class="reg-btn-next" onclick="submitRegister()">ابدأ الدروس ←</button>
+      <button class="reg-btn-back" onclick="goStep(3)">→ تعديل</button>
+    </div>
+  </div>
+
+  <!-- شاشة النجاح -->
+  <div class="reg-panel" id="regSuccess">
+    <div class="reg-success">
+      <div class="reg-success-icon">🎉</div>
+      <h2 class="reg-success-title" id="successTitle">أهلاً وسهلاً!</h2>
+      <p class="reg-success-sub" id="successSub">جارٍ تحضير مسار دروسك...</p>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ══ QUIZ ══ -->
+<div id="quiz" class="screen">
+  <div class="container">
+    <div class="quiz-header">
+      <div class="quiz-logo">مقياس الإحباطات</div>
+      <div class="progress-wrap">
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progressFill" style="width:5%"></div>
+        </div>
+      </div>
+      <div class="q-counter" id="qCounter">1 / 20</div>
+    </div>
+
+    <div id="sectionPill"></div>
+    <div id="qCard" class="q-card"></div>
+
+    <div class="nav-row">
+      <button class="nav-btn primary" id="nextBtn" onclick="nextQ()">التالي ←</button>
+      <button class="nav-btn" id="prevBtn" onclick="prevQ()" disabled>→ السابق</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ RESULT ══ -->
+<div id="result" class="screen">
+  <div class="container">
+    <div class="result-header">
+      <div class="result-badge">نتيجة اختبارك</div>
+      <h2 class="result-title" id="resultTitle"></h2>
+      <p class="result-sub" id="resultSub"></p>
+    </div>
+
+    <div class="score-section">
+      <div class="donut-wrap">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <circle cx="55" cy="55" r="44" fill="none" stroke="#1e2230" stroke-width="10"/>
+          <circle cx="55" cy="55" r="44" fill="none" stroke="url(#donutGrad)" stroke-width="10"
+            stroke-linecap="round" id="donutCircle" stroke-dasharray="276.46" stroke-dashoffset="276.46"/>
+          <defs>
+            <linearGradient id="donutGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#8b6fd4"/>
+              <stop offset="100%" stop-color="#c9a96e"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="donut-center">
+          <div class="donut-pct" id="donutPct">0%</div>
+          <div class="donut-label">إجمالي</div>
+        </div>
+      </div>
+      <div class="score-info">
+        <h3 id="levelName"></h3>
+        <p id="levelDesc"></p>
+      </div>
+    </div>
+
+    <div class="types-result">
+      <h4>توزيع الإحباطات الأربعة</h4>
+      <div class="type-row">
+        <div class="type-row-name">🧠 الفكري</div>
+        <div class="type-bar-bg"><div class="type-bar-fill" id="bar1" style="width:0%;background:#5b8dee"></div></div>
+        <div class="type-row-pct" id="pct1">0%</div>
+      </div>
+      <div class="type-row">
+        <div class="type-row-name">💔 النفسي</div>
+        <div class="type-bar-bg"><div class="type-bar-fill" id="bar2" style="width:0%;background:#8b6fd4"></div></div>
+        <div class="type-row-pct" id="pct2">0%</div>
+      </div>
+      <div class="type-row">
+        <div class="type-row-name">⚡ المادي</div>
+        <div class="type-bar-bg"><div class="type-bar-fill" id="bar3" style="width:0%;background:#d4a843"></div></div>
+        <div class="type-row-pct" id="pct3">0%</div>
+      </div>
+      <div class="type-row">
+        <div class="type-row-name">👥 الخاص</div>
+        <div class="type-bar-bg"><div class="type-bar-fill" id="bar4" style="width:0%;background:#d4658a"></div></div>
+        <div class="type-row-pct" id="pct4">0%</div>
+      </div>
+    </div>
+
+    <div id="treatmentCard"></div>
+
+    <div class="share-row">
+      <button class="share-btn" onclick="copyResult()">📋 انسخ النتيجة</button>
+      <button class="share-btn" onclick="shareResult()">📤 شارك</button>
+    </div>
+    <button class="restart-btn" onclick="restart()">🔄 أعد الاختبار</button>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+  // ── الإحباط الفكري (1-5) ──
+  { type: 0, text: 'حين يسخر منك شخص متعلم أو ناجح من التزامك الديني، كيف يكون شعورك؟', ref: 'تكذيب الوجهاء وأصحاب العقل — ص2-3',
+    choices: ['أثق بمنهجي ولا يؤثر فيّ رأيه','أتضايق قليلاً لكنني أعود لثقتي سريعاً','يجعلني أراجع نفسي وأتساءل أحياناً','يزعزع يقيني ويجعلني أشك فيما أنا عليه'] },
+  { type: 0, text: 'حين يرفض أغلب من حولك قناعاتك الإسلامية، ماذا يدور في ذهنك؟', ref: 'توالي الهزائم يولّد الشك — ص5',
+    choices: ['رفض الأغلبية لا يعني الخطأ، والحق لا يُقاس بالأعداد','أتمنى لو كان الناس معي لكن يقيني لا يتزعزع','أحياناً أفكر: ربما أكون مخطئاً وهم على صواب','أقنع نفسي أن لو كنا على حق لكنا انتصرنا'] },
+  { type: 0, text: 'ترى الناجحين والأقوياء في مجتمعك بعيدين عن الالتزام الديني. كيف يؤثر هذا عليك؟', ref: 'علو الكافر ظاهرياً — ص51-52',
+    choices: ['أعلم أن هذا استدراج وليس تكريماً، فلا يؤثر فيّ','يضايقني لكنني أذكّر نفسي بحقيقة الدنيا','يجعلني أتساءل أحياناً: هل منهجي هو الصحيح فعلاً؟','يشككني في ارتباط الالتزام بالتوفيق والنجاح'] },
+  { type: 0, text: 'حين تُتهم قناعاتك الدينية بأنها "تشدد" أو "أيديولوجيا"، ماذا تفعل؟', ref: 'اتهام الدعوة بالإرهاب والتطرف — ص11',
+    choices: ['أدافع عن قناعاتي بثقة وأوضح الحق بهدوء','أتضايق لكنني أظل ثابتاً على موقفي','أخفف من موقفي أحياناً تجنباً للمواجهة','أصمت تماماً وأتراجع خشية الوصمة'] },
+  { type: 0, text: 'حين يعارض أهل العلم أو المثقفون الإسلام أو يستهينون به، ماذا يحدث لك؟', ref: 'تكذيب أهل الكتاب وأصحاب الفكر — ص4',
+    choices: ['يقيني راسخ ولا يؤثر في موقفي اعتراضهم','يدفعني للبحث والتعلم أكثر لمواجهة شبهاتهم','يُحدث اضطراباً مؤقتاً في يقيني','يجعلني أشك جدياً في صحة فهمي للإسلام'] },
+  // ── الإحباط النفسي (6-10) ──
+  { type: 1, text: 'حين يسخر منك الناس بسبب دينك أو التزامك، كيف يؤثر ذلك عليك؟', ref: 'السخرية الساحقة للنفس — ص4',
+    choices: ['لا يؤثر في نفسي فالسخرية حليف الضعفاء','يؤلمني قليلاً ثم أتجاوزه','يهزّ ثقتي بنفسي ويضعف عطائي لفترة','يكسرني داخلياً ويجعلني أتمنى التراجع'] },
+  { type: 1, text: 'حين ترى الناجحين اجتماعياً هم البعيدون عن الالتزام، ماذا تشعر تجاه نفسك؟', ref: 'الشعور بالرخص مقابل علو غير الملتزم — ص49-50',
+    choices: ['أشعر بكرامتي من الله ولا أقارن نفسي بهم','أتمنى لو أُقدَّر أكثر لكن رضائي بالله يكفيني','أشعر أحياناً أنني أقل شأناً وأنني ضحّيت بلا مقابل','أتمنى أحياناً لو كنت مثلهم لأنال نفس القبول'] },
+  { type: 1, text: 'حين تبذل في الخير ولا يُقدّرك أحد بل يحتقرونك، ماذا يحدث لك؟', ref: 'الاستتفاه والاحتقار للمؤمن — ص3',
+    choices: ['أعمل لله لا للناس فتقديرهم لا يهمني','يؤلمني لكنني أستمر','يقلل من حماسي ويجعلني أتساءل: هل ما أفعله له قيمة؟','يجعلني أتوقف عن العطاء تماماً'] },
+  { type: 1, text: 'حين ينقلب عليك من كنت تتوقع دعمه بسبب مواقفك الدينية، ماذا يحدث لثقتك؟', ref: 'انقلاب الأقارب والأصحاب — ص9-10',
+    choices: ['يؤلمني لكن ثقتي بالله لا تتزعزع','يجعلني أكثر حذراً لكنني أستمر','يُضعف ثقتي بنفسي فترة طويلة','يهدم ثقتي تماماً ويجعلني أشك في صحة ما أنا عليه'] },
+  { type: 1, text: 'حين يتواصل الضغط عليك للتخلي عن قناعاتك، ما الذي يدور في ذهنك؟', ref: 'الضغط المتواصل على النفس المؤمنة — ص7-8',
+    choices: ['الضغط يزيدني ثباتاً لا تراجعاً','يُتعبني لكنني أتجدد بالعبادة والذكر','أتساءل أحياناً: هل يستحق كل هذا؟','أشعر بإرهاق شديد وأقترب من الاستسلام'] },
+  // ── الإحباط المادي (11-15) ──
+  { type: 2, text: 'حين يتوالى عليك الهم من كل اتجاه في نفس الوقت، كيف تتعامل معه؟', ref: 'الإحباطات المركّبة من كل الجهات — ص7-8',
+    choices: ['أرتب أولوياتي وأتعامل مع كل أمر بهدوء','أتضايق لكنني أستمر في العطاء','يثقل عليّ ويُضعف طاقتي للعمل','أشعر بثقل لا أطيقه ويوقفني تماماً'] },
+  { type: 2, text: 'حين تمرّ بضائقة مادية، كيف تؤثر على علاقتك بالله ويقينك؟', ref: 'الحصار الاقتصادي والتجويع — ص9',
+    choices: ['الضيق يزيدني قرباً من الله وتوكلاً عليه','يُتعبني لكنني أحتسب الأجر وأصبر','يجعلني أشعر أحياناً أن الله بعيد عني','يجعلني أتساءل بجدية: لماذا لا ينصر الله الملتزمين؟'] },
+  { type: 2, text: 'لكلّما بدأت مشروعاً خيراً أو فتحت باباً للأمل، جاءتك عقبة جديدة. ماذا تشعر؟', ref: '"لكلما أردت أن أفتح باباً جاءتني هزيمة جديدة" — ص4',
+    choices: ['العقبات سنة الله فأتعامل معها بصبر وأكمل','تُتعبني لكنني أتجدد وأبدأ من جديد','تجعلني أتردد كثيراً قبل أي بداية جديدة','أشعر أن الطريق مسدود وأتوقف عن المحاولة'] },
+  { type: 2, text: 'ما تراه من مآسي المسلمين في العالم، كيف يؤثر على طاقتك وعطائك؟', ref: 'تراكم الرسائل المحزنة وأثرها في الإحباط — ص8',
+    choices: ['يحركني للعمل أكثر ويزيد إحساسي بالمسؤولية','يحزنني لكنني أفعل ما بوسعي ولا أستسلم','يُضعف طاقتي ويجعلني أشعر بالعجز','يجعلني أقول: لا فائدة، وأبتعد عن كل شيء'] },
+  { type: 2, text: 'فقدان شخص عزيز أو تغيّر أوضاعك فجأة، كيف يؤثر على علاقتك بدينك؟', ref: 'وفاة أبي طالب وخديجة وأثرها — ص10',
+    choices: ['يزيدني تعلقاً بالله ويقيناً بالآخرة','يحزنني لكنني أصبر ويقيني يبقى','يجعلني أتساءل: أين نصر الله؟','يجعلني أبتعد عن الالتزام مؤقتاً أو نهائياً'] },
+  // ── الإحباط الخاص (16-20) ──
+  { type: 3, text: 'عائلتك أو أقاربك يضغطون عليك لتتخلى عن موقف ديني. كيف تتصرف؟', ref: 'تصدير المشكلات الاجتماعية لشغل الداعية — ص9',
+    choices: ['أحترم علاقتي بهم وأظل ثابتاً على موقفي بحكمة','يضايقني لكنني أحاول التوازن بين الأمرين','يضعني في حرج شديد وأحياناً أتنازل تجنباً للمشكلة','أتخلى عن الموقف لأن العلاقة أهم في نظري'] },
+  { type: 3, text: 'يطلب منك المقرّبون التخلي عن التزام ديني بذريعة "الواقعية". ماذا تشعر؟', ref: 'إغراء أبي طالب بالتخلي عن حماية الرسول — ص7',
+    choices: ['أشعر بالغربة لكنها دليل على أنني على الحق','يؤلمني لكنني أجد السلوى في ديني','يجعلني أشعر بوحدة شديدة وأتساءل: هل أنا متشدد؟','يجعلني أقتنع فعلاً بأنني مبالغ وأتراجع'] },
+  { type: 3, text: 'أثّرت في شخص ما دينياً ثم تراجع بسبب ضغط محيطه. ماذا تشعر؟', ref: 'من يستجيب ثم يرجع بسبب الخوف — ص6-7',
+    choices: ['أحزن عليه لكن أعلم أن الهداية بيد الله','يؤثر فيّ مؤقتاً ثم أستمر في عطائي','يُحبطني ويُقلل من رغبتي في التأثير على الآخرين','يجعلني أتوقف عن محاولة التأثير في الناس نهائياً'] },
+  { type: 3, text: 'اللهو والإلهاء يشدّ الناس عنك وعمّا تدعو إليه. ماذا تشعر؟', ref: 'استخدام اللهو والغناء لصرف الناس — ص6',
+    choices: ['أفكر في طرق جديدة للوصول إليهم بدل الاستسلام','يُتعبني لكنني لا أتوقف','يجعلني أشعر بالعجز وأتساءل: هل يصل الكلام لأحد؟','أقتنع أن الجيل ضائع ولا فائدة من المحاولة'] },
+  { type: 3, text: 'في نهاية يومك، كيف تقيّم نفسك في ما قدّمته من خير أو دعوة؟', ref: '"إياك أن تحسب بالمردود والاستجابة" — ص73',
+    choices: ['أحمد الله على التوفيق ولا أحاسب نفسي بالاستجابة','أتمنى لو استجاب أكثر لكنني راضٍ بما بذلت','أحاسب نفسي بعدد المستجيبين وأشعر بالإخفاق غالباً','أشعر دائماً أنني فاشل لأن لا أحد يستجيب كما أريد'] },
+];
+
+const TYPES = [
+  { name: 'الإحباط الفكري', icon: '🧠', color: '#5b8dee',
+    pill_bg: 'rgba(91,141,238,0.15)', pill_color: '#5b8dee' },
+  { name: 'الإحباط النفسي', icon: '💔', color: '#8b6fd4',
+    pill_bg: 'rgba(139,111,212,0.15)', pill_color: '#8b6fd4' },
+  { name: 'الإحباط المادي', icon: '⚡', color: '#d4a843',
+    pill_bg: 'rgba(212,168,67,0.15)', pill_color: '#d4a843' },
+  { name: 'الإحباط الخاص', icon: '👥', color: '#d4658a',
+    pill_bg: 'rgba(212,101,138,0.15)', pill_color: '#d4658a' },
+];
+
+const TREATMENTS = [
+  // ── الإحباط الفكري ──
+  [
+    { level: 'خفيف', head_bg: 'rgba(91,141,238,0.15)', icon_bg: 'rgba(91,141,238,0.2)',
+      text: 'أنت في موضع جيد والحمد لله، لكن الوقاية أهم من العلاج. اعلم أن ما تواجهه من تساؤلات عابرة أو استهزاء يسير هو السنة الثابتة مع كل من سار على الطريق. لم يأتِ نبي إلا كُذِّب، ولم يُعلن داعية الحق إلا واجه الرفض. الأمر ليس فيك ولا في منهجك — بل هو في طبيعة هذا الطريق منذ آدم حتى يومنا. القرآن الكريم قال لرسول الله صريحاً: "إِنَّكَ عَلَى الْحَقِّ الْمُبِينِ" — وهذه اللفظة "المبين" لم تأتِ في القرآن كله إلا في هذا الموضع الواحد، في سورة النمل — سورة الصبر والخروج من الالتباس — تأكيداً لمن يعمل للحق أن ما يواجهه من ضغط لا يعني أنه مخطئ.',
+      aya: '"إِنَّكَ عَلَى الْحَقِّ الْمُبِينِ" — سورة النمل آية 79',
+      steps: [
+        'في أول فرصة، اقرأ سورة النمل كاملة — ستجد فيها مرآة لكل ما تعيشه.',
+        'اكتب جملة واحدة وضعها أمامك: "رفض الناس لا يعني أنني مخطئ — كذّبوا كل الأنبياء."',
+        'كلما خالطك شك، افتح سيرة نبي من الأنبياء وانظر كيف بدأ يائساً وانتهى منتصراً.',
+      ],
+      src: 'المعالجة الفكرية — ص34-35' },
+
+    { level: 'متوسط', head_bg: 'rgba(91,141,238,0.15)', icon_bg: 'rgba(91,141,238,0.2)',
+      text: 'سبب إحباطك الفكري أن لديك توقعاً خاطئاً بنى عليه إحساسك بالفشل: أنك تظن أن الحق إذا عُرض قُبل، وإذا رُفض فمعناه أنه ليس حقاً. لكن القرآن يفاجئك بحقيقة مذهلة: أعداؤك يعرفون — في قرارة أنفسهم — أنك على الحق. الله قال: "قَدْ نَعْلَمُ إِنَّهُ لَيَحْزُنُكَ الَّذِي يَقُولُونَ فَإِنَّهُمْ لَا يُكَذِّبُونَكَ" — أي أنهم لا يكذّبونك أنت شخصياً، لكنهم يجحدون بآيات الله ظلماً وعلوّاً. إبليس يعرف الحق ويجحده. أبو جهل ذهب بنفسه ليسمع القرآن سراً ثلاث ليال متتالية — وكان يعرف. الرفض ليس دليل الخطأ، بل قد يكون دليل الصواب.',
+      aya: '"قَدْ نَعْلَمُ إِنَّهُ لَيَحْزُنُكَ الَّذِي يَقُولُونَ فَإِنَّهُمْ لَا يُكَذِّبُونَكَ وَلَٰكِنَّ الظَّالِمِينَ بِآيَاتِ اللَّهِ يَجْحَدُونَ" — الأنعام 33',
+      steps: [
+        'أعد قراءة هذه الآية مرات حتى تستوعبها: "لَا يُكَذِّبُونَكَ" — هم يعرفون أنك صادق.',
+        'توقف عن قياس صحة منهجك بعدد المقتنعين — هذا معيار خاطئ من الأساس.',
+        'اسأل نفسك: هل كان موسى مخطئاً لأن فرعون رفضه؟ هل كان نوح مخطئاً لأن قومه ضحكوا منه؟',
+        'كلما ضايقك رأي أحد، تذكر: "يَجْحَدُونَ" — الجحود ليس مشكلتك بل مشكلة قلوبهم.',
+      ],
+      src: 'ص35-36 — أعداؤك يعرفون أنك على الحق' },
+
+    { level: 'عالٍ', head_bg: 'rgba(91,141,238,0.15)', icon_bg: 'rgba(91,141,238,0.2)',
+      text: 'أنت تعتقد أن ما يحدث لك غريب وشاذ. لكن اعلم — وهذه الحقيقة ستغير رؤيتك كلياً — أن التاريخ البشري بأكمله منذ بدأ الخلق وحتى يومنا هذا، لم تمر فيه قرية واحدة ولا أمة واحدة ولا فرد واحد أرسل إليهم نذير إلا قالوا: ساحر أو مجنون أو متشدد أو أسطورة. الله قال: "كَذَٰلِكَ مَا أَتَى الَّذِينَ مِن قَبْلِهِم مِّن رَّسُولٍ إِلَّا قَالُوا سَاحِرٌ أَوْ مَجْنُونٌ". نوح لبث في قومه ألف سنة إلا خمسين عاماً — ويسخرون منه وهو يبني السفينة! موسى أتى بتسع آيات واضحات — ويقولون عنه ساحر. أنت تعتقد أن قصورك في المعلومات جعلك تحسب ما يحدث لك استثناءً. إنه ليس استثناءً أبداً — هو القاعدة الدائمة.',
+      aya: '"كَذَٰلِكَ مَا أَتَى الَّذِينَ مِن قَبْلِهِم مِّن رَّسُولٍ إِلَّا قَالُوا سَاحِرٌ أَوْ مَجْنُونٌ، أَتَوَاصَوْا بِهِ بَلْ هُمْ قَوْمٌ طَاغُونَ" — الذاريات 52-53',
+      steps: [
+        'اقرأ سورة النمل كاملة — فيها قصة سليمان الذي ملك الدنيا وظل يعلن الحق.',
+        'اقرأ سورة الذاريات وتأمل هذه الآية: "أَتَوَاصَوْا بِهِ" — كأنهم تواصوا على تكذيبك!',
+        'اكتب في ورقة: كم نبياً كُذِّب؟ كم داعياً سُخر منه؟ ثم اسأل: من انتصر في النهاية؟',
+        'قرّر ألا تقيس نجاحك بردود فعل الناس — قيّسه بمقدار ما بذلت.',
+      ],
+      src: 'ص37-40 — التاريخ البشري كله بهذه الصورة' },
+
+    { level: 'حاد', head_bg: 'rgba(91,141,238,0.15)', icon_bg: 'rgba(91,141,238,0.2)',
+      text: 'أنت وصلت إلى مرحلة تشكيك عميق. هذا يحدث حين يكون توقعك للمنهج مختلفاً عن حقيقته. أنت كنت تتصور أن منهج الإسلام مثل سباق السباحة — المجرى سالك والماء هادئ. لكن منهج الإسلام في الحقيقة مثل سباق القفز فوق الحواجز — والحواجز جزء أساسي من اللعبة لا استثناء عليها! الطبيب حين يتدرب يتعلم كيف يواجه المضاعفات — لا كيف يجري عملية في ظروف مثالية لا وجود لها. المحامي يتدرب على ردود الفعل المضادة. سباق الخيل يتدرب الفرس فيه على العوائق المائية والنارية. فلماذا تتوقع أنت منهجاً بلا عوائق؟ قال الله لرسوله: "وَكَذَٰلِكَ جَعَلْنَا لِكُلِّ نَبِيٍّ عَدُوًّا مِّنَ الْمُجْرِمِينَ" — العدو جزء أساسي من المنهج. لم يُستثنَ منه نبي.',
+      aya: '"أَمْ حَسِبْتُمْ أَن تَدْخُلُوا الْجَنَّةَ وَلَمَّا يَأْتِكُم مَّثَلُ الَّذِينَ خَلَوْا مِن قَبْلِكُم مَّسَّتْهُمُ الْبَأْسَاءُ وَالضَّرَّاءُ وَزُلْزِلُوا" — البقرة 214',
+      steps: [
+        'أوقف فوراً المقارنة بين واقعك والمنهج المثالي المتخيَّل — ذلك المنهج لم يوجد يوماً.',
+        'اقرأ قصة المرحلة المكية كاملة من أي كتاب سيرة — وانظر كيف وصل الأمر بالنبي ﷺ نفسه.',
+        'ابحث عن صحبة من الشباب الثابتين — الإحباط الفكري يعالجه الأخ الثابت أكثر من الكتاب.',
+        'قل في نفسك يومياً: "هذا ما وعدنا الله ورسوله — وصدق الله ورسوله."',
+      ],
+      src: 'ص41-44 — منهج الإسلام منهج مع العوائق لا منهج رومانسي' },
+  ],
+
+  // ── الإحباط النفسي ──
+  [
+    { level: 'خفيف', head_bg: 'rgba(139,111,212,0.15)', icon_bg: 'rgba(139,111,212,0.2)',
+      text: 'ثقتك بنفسك جيدة بفضل الله، لكن انتبه لفتنة لطيفة قد تتسرب إليك: أن ترى أصحاب السلطة والمال والوجاهة يتقدمون في الدنيا، فيداخلك شعور بأنك ضحّيت بلا مقابل. الله ذكر لنا هذه الفتنة بالاسم: "وَلَا تَمُدَّنَّ عَيْنَيْكَ إِلَىٰ مَا مَتَّعْنَا بِهِ أَزْوَاجًا مِّنْهُمْ". وقال في آية أخرى أن ما يُعطَى للكافرين هو استدراج لا تكريم — "نُمَتِّعُهُمْ ثُمَّ يَأْخُذُهُمْ". نعمة في يد الكافر هي حبل يُمد له ليزيد في الغواية.',
+      aya: '"وَلَا تَمُدَّنَّ عَيْنَيْكَ إِلَىٰ مَا مَتَّعْنَا بِهِ أَزْوَاجًا مِّنْهُمْ زَهْرَةَ الْحَيَاةِ الدُّنْيَا" — طه 131',
+      steps: [
+        'كلما رأيت أحداً يعلو بكفره، قل في نفسك: هذا استدراج لا تكريم.',
+        'اقرأ قصة قارون — كان أغنى من في زمنه، ثم خُسف به وبداره الأرض.',
+        'اكتب ثلاثة أشياء أعطاكها الله لا يملكها أصحاب الدنيا: يقين، راحة قلب، صلة بالله.',
+      ],
+      src: 'المعالجة النفسية — ص49-52' },
+
+    { level: 'متوسط', head_bg: 'rgba(139,111,212,0.15)', icon_bg: 'rgba(139,111,212,0.2)',
+      text: 'أنت تشعر أحياناً أنك أقل شأناً ممن حولك من غير الملتزمين. هذا الشعور بالضعف النفسي — بالرخص — هو بالضبط ما أراد أعداء الدعوة أن يزرعوه فيك. لكن دعني أخبرك الحقيقة: كرام الخلق كانوا رخاصاً على الناس! يوسف الصدّيق — النبي الكريم بن الكريم بن الكريم بن الكريم — بيع بثمن زهيد "دراهم معدودة". موسى كليم الله، الذي وقف في حضرة رب العالمين، خرج من مصر مذعوراً وهو جائع حافٍ ضائع لا بيت له ولا أكل ولا شراب. شعيب عليه السلام قيل له: "مَا نَفْقَهُ كَثِيرًا مِّمَّا تَقُولُ وَإِنَّا لَنَرَاكَ فِينَا ضَعِيفًا". هذا الرخص ليس هو المحك — المحك سيكون يوم القيامة حيث تتعدل الموازين تماماً.',
+      aya: '"وَكَذَٰلِكَ فَتَنَّا بَعْضَهُم بِبَعْضٍ لِّيَقُولُوا أَهَٰؤُلَاءِ مَنَّ اللَّهُ عَلَيْهِم مِّن بَيْنِنَا" — الأنعام 53',
+      steps: [
+        'اقرأ قصة يوسف عليه السلام كاملة — كل هوان كان خطوة نحو العلو الحقيقي.',
+        'اقرأ قصة أصحاب الكهف — كانوا أبناء وزراء وأمراء ومع ذلك لجأوا إلى كهف.',
+        'تذكر أن بلالاً رضي الله عنه كان يُباع ويُشترى — والآن اسمه يُذكر على المآذن.',
+        'اكتب اسم شخص تعرفه يسخر من دينك — ثم تخيّل كيف سيكون مكانه يوم القيامة.',
+      ],
+      src: 'ص50-53 — كرام الخلق كانوا رخاصاً وهذا ليس المحك' },
+
+    { level: 'عالٍ', head_bg: 'rgba(139,111,212,0.15)', icon_bg: 'rgba(139,111,212,0.2)',
+      text: 'أنت تشعر الآن بهزيمة نفسية حقيقية. وهذا بالضبط ما حدث للمسلمين الأوائل — حتى الصحابة الكرام الذين كانوا رؤساء عائلاتهم وأغنياءها، أصبحوا لا يساوون شيئاً في عيون الناس. لكن القرآن جاء بنقلة عجيبة: قلب المعادلة النفسية كلياً. يقول تعاىل: "إِنَّ الَّذِينَ أَجْرَمُوا كَانُوا مِنَ الَّذِينَ آمَنُوا يَضْحَكُونَ" — في الدنيا كانوا يضحكون على المؤمنين. ثم يكمل: "فَالْيَوْمَ الَّذِينَ آمَنُوا مِنَ الْكُفَّارِ يَضْحَكُونَ" — يوم القيامة تنقلب الصورة. أهل الجنة يجلسون مع بعضهم ويتحدثون — يقول أحدهم: "كان لي صاحب في الدنيا يسخر مني" — فيذهبون لينظروا فيجدونه في جهنم!',
+      aya: '"إِنَّ الَّذِينَ أَجْرَمُوا كَانُوا مِنَ الَّذِينَ آمَنُوا يَضْحَكُونَ، فَالْيَوْمَ الَّذِينَ آمَنُوا مِنَ الْكُفَّارِ يَضْحَكُونَ" — المطففين 29، 34',
+      steps: [
+        'اقرأ سورة المطففين كاملة قبل النوم أسبوعاً — ستنام بنفسية مختلفة تماماً.',
+        'تذكر أن الله قال للنبي ﷺ: "فَاصْبِرْ لِحُكْمِ رَبِّكَ وَأَنتَ بِأَعْيُنِنَا" — أنت بعين الله الآن.',
+        'لا تمشِ بمفردك نفسياً — ابحث عن صاحب يقوّيك حين تضعف، كما كان الصحابة يتزاور بعضهم.',
+        'اكتب على ورقة: "الذين يسخرون مني اليوم سيكون موقفهم غداً..." واكمل بنفسك.',
+      ],
+      src: 'ص54-57 — المقاييس تتعدل في الآخرة تماماً' },
+
+    { level: 'حاد', head_bg: 'rgba(139,111,212,0.15)', icon_bg: 'rgba(139,111,212,0.2)',
+      text: 'أنت في حالة هوان نفسي حاد. وهذا بالضبط ما شعر به بلال وعمار وخباب وغيرهم — لم يكونوا يساوون شيئاً في عيون مكة. لكن القرآن قلب الأمر: جعل هذا الرخص اجتباءً واصطفاءً. يوسف عليه السلام بيع بثمن زهيد — لأن الله أراد له أن يصل إلى قصر الملك عبر هذا الطريق. البذرة تُدفن في التراب أولاً — وهذا الدفن لا يعني موتها بل يعني أنها ستنبت. والذهب يُلقى في النار لا لإحراقه بل لتنقيته من الشوائب. أنت الآن في مرحلة التنقية والإعداد. والله قال للنبي ﷺ حين بلغ الإحباط منه مبلغاً: "فَاصْبِرْ لِحُكْمِ رَبِّكَ وَأَنتَ بِأَعْيُنِنَا" — أنت بعين الله. هذا يكفي.',
+      aya: '"وَصَبَرُوا وَمَا وَهَنُوا لِمَا أَصَابَهُمْ فِي سَبِيلِ اللَّهِ وَمَا ضَعُفُوا وَمَا اسْتَكَانُوا وَاللَّهُ يُحِبُّ الصَّابِرِينَ" — آل عمران 146',
+      steps: [
+        'أوقف الآن المقارنة بينك وبين من يعلو بالدنيا — مقاييسكما مختلفة من الأساس.',
+        'اقرأ قصة يوسف عليه السلام كاملة وانتبه: كل مرحلة هوان كانت تقوده إلى مقام أعلى.',
+        'لا تمكث وحدك مع هذا الشعور — تحدث مع شخص حكيم تثق به اليوم قبل غدٍ.',
+        'قل للنفسك: "الله يراني الآن — وهذا يكفي — ويكفي."',
+      ],
+      src: 'ص49-57 — الرخص اجتباء لا حقارة، والبذرة تُدفن قبل أن تنبت' },
+  ],
+
+  // ── الإحباط المادي ──
+  [
+    { level: 'خفيف', head_bg: 'rgba(212,168,67,0.15)', icon_bg: 'rgba(212,168,67,0.2)',
+      text: 'أنت تتعامل مع المصائب بصبر جيد. لكن احرص على قاعدة ذهبية واحدة تحميك من الإحباط المادي مستقبلاً: لا تحسب مكسبك وخسارتك بعدد المستجيبين أو بحجم نتائج عملك. أنت داعية تعمل عبادةً لله — لا مرشحاً يدخل انتخابات يحسب فيها الأصوات. الله قال: "لَّيْسَ عَلَيْكَ هُدَاهُمْ وَلَٰكِنَّ اللَّهَ يَهْدِي مَن يَشَاءُ" — مسؤوليتك هي البذل، أما الحصاد فهو بيد الله وحده.',
+      aya: '"لَّيْسَ عَلَيْكَ هُدَاهُمْ وَلَٰكِنَّ اللَّهَ يَهْدِي مَن يَشَاءُ" — البقرة 272',
+      steps: [
+        'في نهاية كل يوم، احسب كم بذلت — لا كم حصلت. هذا هو الحساب الصحيح.',
+        'إياك أن تعود للبيت وتقول: "اليوم لم ينفع شيء" — بل قل: "اليوم بذلت."',
+        'تذكر أن النبي ﷺ في المرحلة المكية كانت تمر سنة كاملة لا يُسلم فيها إلا ستة أو سبعة.',
+      ],
+      src: 'معالجة الإحباطات بالعمل — ص73' },
+
+    { level: 'متوسط', head_bg: 'rgba(212,168,67,0.15)', icon_bg: 'rgba(212,168,67,0.2)',
+      text: 'المصائب المتتالية تُنهك الطاقة وتجعل الإنسان يشعر أنه يفتح باباً فيجد خلفه هزيمة، ثم يفتح آخر فيجد هزيمة. لكن اعلم حقيقة مهمة: الصبر ليس معوقاً للمنهج بل هو ركن أساسي فيه. طالوت لم ينتصر بجيش متكامل — فَرَزَ رجاله بالاختبار حتى بقي معه القليل الذي صبر، ثم انتصروا بإذن الله. القرآن يقول: "كَمْ مِن فِئَةٍ قَلِيلَةٍ غَلَبَتْ فِئَةً كَثِيرَةً بِإِذْنِ اللَّهِ". المصائب تُرحّل الضعفاء وتُبقي الأقوياء. وهذا التمحيص ضروري قبل النصر.',
+      aya: '"وَلَمَّا رَأَى الْمُؤْمِنُونَ الْأَحْزَابَ قَالُوا هَٰذَا مَا وَعَدَنَا اللَّهُ وَرَسُولُهُ وَصَدَقَ اللَّهُ وَرَسُولُهُ وَمَا زَادَهُمْ إِلَّا إِيمَانًا وَتَسْلِيمًا" — الأحزاب 22',
+      steps: [
+        'حين تأتيك مصيبة قل: "هذا ما وعدنا الله ورسوله" — أي كنت أتوقعه، فلماذا أتفاجأ؟',
+        'رتّب أولوياتك: اشتغل بما في يدك فقط — لا تحمل هم العالم كله في وقت واحد.',
+        'تذكر أن كل ضربة تأتيك تُرحّل من لا يتحمل، وتُبقيك أنت — وهذا شرف.',
+      ],
+      src: 'ص22 — الصبر ركن في النصر لا عائق عليه' },
+
+    { level: 'عالٍ', head_bg: 'rgba(212,168,67,0.15)', icon_bg: 'rgba(212,168,67,0.2)',
+      text: 'أنت تشعر بالإرهاق من توالي الضربات. الله ذكر لنا هذا بالاسم في القرآن وجعله علامة على الطريق الصحيح، لا عقوبة على الخطأ. قال تعالى: "وَلَنَبْلُوَنَّكُم بِشَيْءٍ مِّنَ الْخَوْفِ وَالْجُوعِ وَنَقْصٍ مِّنَ الْأَمْوَالِ وَالْأَنفُسِ وَالثَّمَرَاتِ". انتبه لكلمة "شيء من" — أي أن ما يأتيك هو جزء يسير مما يمكن أن يأتي. وجاء البلاء بصيغة النون "لَنَبْلُوَنَّكُم" — قسَم من الله. البلاء وعد مسبق، لا عقاب مفاجئ. وانتبه لآخر الآية: "وَبَشِّرِ الصَّابِرِينَ" — البشارة للصابر لا للسالم!',
+      aya: '"وَلَنَبْلُوَنَّكُم بِشَيْءٍ مِّنَ الْخَوْفِ وَالْجُوعِ وَنَقْصٍ مِّنَ الْأَمْوَالِ وَالْأَنفُسِ وَالثَّمَرَاتِ وَبَشِّرِ الصَّابِرِينَ" — البقرة 155',
+      steps: [
+        'تأمل "شيء من" — ما يأتيك ليس الحد الأقصى، بل جزء يسير مما يمكن أن يكون.',
+        'اكتب المصيبة التي تمر بها واسأل: هل أصابت إيماني، أم جسدي فقط؟ الإيمان هو الأصل.',
+        'تذكر أن المسلمين الأوائل أكلوا أوراق الشجر ثلاث سنوات — ثم جاء الفتح.',
+        'قل: "هذا وعد مسبق من الله، لا مفاجأة، ولا عقاب، ولا دليل على خطئي."',
+      ],
+      src: 'ص24 — البلاء وعد مسبق لا عقاب على الخطأ' },
+
+    { level: 'حاد', head_bg: 'rgba(212,168,67,0.15)', icon_bg: 'rgba(212,168,67,0.2)',
+      text: 'وصلت إلى مرحلة "لا فائدة". وهذا بالضبط ما قاله بعض المسلمين الأوائل حين طال عليهم الأمد. فجاء القرآن بأعظم بشارة في تاريخ الدعوة — النصر لهذا الجيل لا للجيل القادم فقط. قال تعاىل: "إِنَّهُمْ لَهُمُ الْمَنصُورُونَ وَإِنَّ جُندَنَا لَهُمُ الْغَالِبُونَ". ثم قال: "وَلَقَدْ سَبَقَتْ كَلِمَتُنَا لِعِبَادِنَا الْمُرْسَلِينَ إِنَّهُمْ لَهُمُ الْمَنصُورُونَ". النصر وعد مكتوب، لا أمنية. لكنه مشروط بشرط واحد: أن تظل في الميدان ولا تنسحب. الذي ينسحب يفوّت نصراً كان مكتوباً له. والنبي ﷺ يقول: "انصر أخاك ظالماً أو مظلوماً" — الميدان هو المكان، والعمل هو الباب.',
+      aya: '"وَلَقَدْ سَبَقَتْ كَلِمَتُنَا لِعِبَادِنَا الْمُرْسَلِينَ إِنَّهُمْ لَهُمُ الْمَنصُورُونَ وَإِنَّ جُندَنَا لَهُمُ الْغَالِبُونَ" — الصافات 171-173',
+      steps: [
+        'أوقف فوراً حساب المكسب والخسارة — أنت لست حزباً سياسياً في انتخابات.',
+        'اختر عملاً واحداً صغيراً — أصغر ما يمكن — وابدأه اليوم قبل أن تنام.',
+        'لا تمكث وحدك — تحدث مع شخص حكيم تثق به. الإحباط الحاد لا يُعالَج بالعزلة.',
+        'اقرأ سورة الصافات من آية 171 حتى النهاية — وتذكر أن هذا وعد مكتوب لك.',
+      ],
+      src: 'ص48 — النصر وعد مكتوب للعاملين الصابرين في الميدان' },
+  ],
+
+  // ── الإحباط الخاص ──
+  [
+    { level: 'خفيف', head_bg: 'rgba(212,101,138,0.15)', icon_bg: 'rgba(212,101,138,0.2)',
+      text: 'علاقاتك الاجتماعية لا تؤثر سلباً على مبادئك، والحمد لله. لكن احرص على شيء واحد مهم: الوضوح. الغموض في المواقف يولّد ضغطاً أكبر بكثير من الوضوح. أبو بكر الصديق رضي الله عنه حين طلبوا منه أن يصلي في الداخل لا على النافذة المطلة على الجيران، قال لهم بهدوء وبلا توتر: "إن أبيت فافعل — دعوتي مستمرة." لم يتجادل ولم يتشاجر — لكنه لم يتراجع.',
+      aya: '"ادْعُ إِلَىٰ سَبِيلِ رَبِّكَ بِالْحِكْمَةِ وَالْمَوْعِظَةِ الْحَسَنَةِ وَجَادِلْهُم بِالَّتِي هِيَ أَحْسَنُ" — النحل 125',
+      steps: [
+        'اختر شخصاً قريباً منك وابدأ معه محادثة صريحة وهادئة عن قناعاتك — الوضوح يريح الجميع.',
+        'لا تعتذر عن التزامك أمام أحد — الاعتذار يُضعفك ويُغري الآخرين بالضغط عليك أكثر.',
+        'تذكر: يمكنك أن تكون لطيفاً ومحبوباً دون أن تتنازل عن موقفك.',
+      ],
+      src: 'ص59-60 — إعالن الحق بوضوح هو أول خطوة في مواجهة الإحباطات' },
+
+    { level: 'متوسط', head_bg: 'rgba(212,101,138,0.15)', icon_bg: 'rgba(212,101,138,0.2)',
+      text: 'الضغط الاجتماعي بدأ يؤثر عليك. لكن اعلم سراً يغير منظورك كلياً: الإسلام يفرق تفريقاً حاداً بين معاداة الكفر ومعاداة الكافر. أنت تعادي الفكرة والعقيدة الفاسدة — لا الشخص. هذا يتيح لك أن تكون عطوفاً على الإنسان وأنت تضرب في الباطل الذي يحمله. النبي ﷺ كان يدعو لأبي جهل بالهداية — كان يقول: "اللهم أعز الإسلام بأحب الرجلين إليك: عمرو بن هشام أو عمر بن الخطاب." وعمر كان من أشد الناس على المسلمين! لكن النبي رأى الإنسان لا الكفر.',
+      aya: '"اللَّهُمَّ اهْدِ قَوْمِي فَإِنَّهُمْ لَا يَعْلَمُونَ" — دعاء النبي ﷺ حين أُوذي في الطائف',
+      steps: [
+        'فرّق في ذهنك بين الشخص الذي تحبه وبين الفكرة التي ترفضها — هذا التمييز يريحك.',
+        'لا تكره أحداً بسبب موقفه — بل ادعُ له بالهداية. النبي دعا لمن رماه بالحجارة.',
+        'لا تنتظر موافقة المقربين لتستمر في عملك — العمل عبادة لا تحتاج تصفيقاً.',
+        'تذكر: سهيل بن عمرو الذي منع النبي من دخول مكة — مات مسلماً يبكي من القرآن.',
+      ],
+      src: 'ص67-72 — معاداة الكفر لا الكافر، وعذوبة الدعوة مع الوضوح' },
+
+    { level: 'عالٍ', head_bg: 'rgba(212,101,138,0.15)', icon_bg: 'rgba(212,101,138,0.2)',
+      text: 'الوحدة والغربة تثقلان عليك. لكن دعني أخبرك: غربتك دليل صواب لا دليل خطأ. النبي ﷺ قضى ثلاث عشرة سنة يذهب وحده إلى قبائل العرب في موسم الحج يعرض نفسه عليهم — "من يؤويني وينصرني؟" — فلا يجد أحداً. كان يذهب وحيداً ويعود وحيداً. ورغم ذلك لم يتوقف. أبو بكر الصديق رضي الله عنه حين أراد أن يهاجر، قال له ابن الدغنة: "مثلك لا يُخرَج ولا يَخرُج!" — أي أن رجلاً بهذا المقام يجب أن تحميه القبيلة. فتحالف معه. ليس لأن الحق معه أقل — بل لأن الله أرسل من يحمله.',
+      aya: '"فَاصْبِرْ إِنَّ وَعْدَ اللَّهِ حَقٌّ وَلَا يَسْتَخِفَّنَّكَ الَّذِينَ لَا يُوقِنُونَ" — الروم 60',
+      steps: [
+        'ابحث عن مجتمع ولو صغير من الشباب الثابتين — الوحدة الطويلة تُضعف حتى الأقوياء.',
+        'اقرأ قصة المرحلة المكية كاملة — كم كانت الغربة حقيقية، وكيف انتهت بالفتح.',
+        'لا تنتظر أن يأتيك الدعم — اذهب أنت وابحث عنه. النبي ﷺ ذهب إلى القبائل لا انتظرها.',
+        'تذكر أن كل نبي قال في لحظة: "رَبِّ إِنِّي دَعَوْتُ قَوْمِي..." — ومع ذلك لم يتوقف.',
+      ],
+      src: 'ص5-6 — الغربة في الطريق سنة الأنبياء لا علامة خطأ' },
+
+    { level: 'حاد', head_bg: 'rgba(212,101,138,0.15)', icon_bg: 'rgba(212,101,138,0.2)',
+      text: 'أنت وصلت إلى مرحلة التوقف تقريباً. والإسلام هنا يقول لك شيئاً واحداً بحزم: العمل عبادة — لا نتيجة. أنت لست مسؤولاً عن هداية الناس. أنت مسؤول عن إعلان الحق في كل ميدان وبكل سبيل — سواء استجاب أحد أم لم يستجب. الله قال لنبيه: "لَّيْسَ عَلَيْكَ هُدَاهُمْ وَلَٰكِنَّ اللَّهَ يَهْدِي مَن يَشَاءُ." وقال له أيضاً: "إِنَّكَ لَا تَهْدِي مَنْ أَحْبَبْتَ وَلَٰكِنَّ اللَّهَ يَهْدِي مَن يَشَاءُ." رسالتك: البذل. أما الحصاد فعند الله. والنبي ﷺ بعد ثلاثة عشر عاماً من الصد خرج وترك مكة — لكنه في طريق الهجرة بشّر رساقة بن مالك الذي جاء ليقبض عليه، بأنه سيلبس سواري كسرى!',
+      aya: '"لَّيْسَ عَلَيْكَ هُدَاهُمْ وَلَٰكِنَّ اللَّهَ يَهْدِي مَن يَشَاءُ" — البقرة 272',
+      steps: [
+        'اكتب جملة واحدة وضعها أمامك الآن: "أنا مسؤول عن البذل لا عن الحصاد."',
+        'اختر عملاً واحداً أصغر ما يمكن — وابدأه اليوم قبل أن تنام. واحدة فقط.',
+        'لا تمكث وحدك مع هذا الشعور — تحدث مع شخص حكيم تثق به. الإحباط الحاد يحتاج أخاً.',
+        'تذكر قصة رساقة: النبي كان يُطارَد — ومع ذلك كان يُبشِّر من يطارده. هذا هو المنهج.',
+      ],
+      src: 'ص71-72 — البذل عبادة والحصاد عند الله، والميدان لا يُترك' },
+  ],
+];
+
+let current = 0;
+let answers = new Array(20).fill(null);
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function startQuiz() { showScreen('quiz'); renderQ(); }
+
+function renderQ() {
+  const q = QUESTIONS[current];
+  const t = TYPES[q.type];
+
+  // Progress
+  const pct = ((current + 1) / 20) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('qCounter').textContent = (current+1) + ' / 20';
+
+  // Section pill
+  document.getElementById('sectionPill').innerHTML =
+    `<div class="section-pill" style="background:${t.pill_bg};color:${t.pill_color}">${t.icon} ${t.name}</div>`;
+
+  // Question card
+  const choicesHtml = q.choices.map((c, i) => {
+    const labels = ['أ','ب','ج','د'];
+    const sel = answers[current] === i ? 'selected' : '';
+    return `<button class="choice-btn ${sel}" onclick="selectAnswer(${i})">
+      <span class="choice-label">${labels[i]}</span>
+      <span class="choice-text">${c}</span>
+    </button>`;
+  }).join('');
+
+  document.getElementById('qCard').innerHTML = `
+    <div class="q-text">${q.text}</div>
+    <div class="q-ref">📖 ${q.ref}</div>
+    <div class="choices">${choicesHtml}</div>
+  `;
+
+  document.getElementById('prevBtn').disabled = current === 0;
+  document.getElementById('nextBtn').textContent = current === 19 ? 'عرض النتيجة ✓' : 'التالي ←';
+}
+
+function selectAnswer(i) {
+  answers[current] = i;
+  document.querySelectorAll('.choice-btn').forEach((b, idx) => {
+    b.classList.toggle('selected', idx === i);
+    b.querySelectorAll('.choice-label')[0].style.background = idx === i ? 'var(--accent)' : '';
+    b.querySelectorAll('.choice-label')[0].style.borderColor = idx === i ? 'var(--accent)' : '';
+    b.querySelectorAll('.choice-label')[0].style.color = idx === i ? '#1a0f00' : '';
+  });
+}
+
+function nextQ() {
+  if (answers[current] === null) {
+    document.getElementById('qCard').style.outline = '2px solid var(--accent)';
+    setTimeout(() => document.getElementById('qCard').style.outline = '', 600);
+    return;
+  }
+  if (current === 19) { showResult(); return; }
+  current++;
+  renderQ();
+}
+
+function prevQ() {
+  if (current > 0) { current--; renderQ(); }
+}
+
+function showResult() {
+  showScreen('result');
+
+  // Calculate scores per type (each type: 5 questions, max 20)
+  const scores = [0, 0, 0, 0];
+  QUESTIONS.forEach((q, i) => { scores[q.type] += (answers[i] ?? 0) + 1; });
+  const total = scores.reduce((a, b) => a + b, 0);
+  const totalMax = 80;
+  const totalPct = Math.round((total / totalMax) * 100);
+
+  // Level
+  let levelName, levelDesc, levelColor;
+  if (total <= 35) {
+    levelName = 'إحباط خفيف'; levelColor = '#5db87a';
+    levelDesc = 'أنت في وضع جيد نسبياً. حصّن ما عندك وواصل.';
+  } else if (total <= 55) {
+    levelName = 'إحباط متوسط'; levelColor = '#d4a843';
+    levelDesc = 'الإحباط موجود لكنه قابل للعلاج. المنهج القرآني هو طريقك.';
+  } else if (total <= 70) {
+    levelName = 'إحباط عالٍ'; levelColor = '#e07b5c';
+    levelDesc = 'الإحباط يؤثر عليك بوضوح. تحتاج منهجاً منظماً للعلاج.';
+  } else {
+    levelName = 'إحباط حاد'; levelColor = '#d4658a';
+    levelDesc = 'الإحباط وصل مرحلة حادة. العلاج القرآني الآن ضرورة لا خيار.';
+  }
+
+  document.getElementById('resultTitle').textContent = levelName;
+  document.getElementById('resultSub').textContent = levelDesc;
+  document.getElementById('levelName').textContent = levelName;
+  document.getElementById('levelName').style.color = levelColor;
+  document.getElementById('levelDesc').textContent = levelDesc;
+
+  // Donut animation
+  setTimeout(() => {
+    document.getElementById('donutPct').textContent = totalPct + '%';
+    const circle = document.getElementById('donutCircle');
+    const circumference = 276.46;
+    const offset = circumference - (totalPct / 100) * circumference;
+    circle.style.strokeDashoffset = offset;
+    circle.style.transition = 'stroke-dashoffset 1.2s ease';
+  }, 200);
+
+  // Type bars
+  ['1','2','3','4'].forEach((n, i) => {
+    const pct = Math.round((scores[i] / 20) * 100);
+    setTimeout(() => {
+      document.getElementById('bar' + n).style.width = pct + '%';
+      document.getElementById('pct' + n).textContent = pct + '%';
+    }, 400 + i * 100);
+  });
+
+  // Find dominant type
+  const maxScore = Math.max(...scores);
+  const dominantType = scores.indexOf(maxScore);
+  const typeScore = scores[dominantType];
+  let treatmentLevel;
+  if (typeScore <= 8) treatmentLevel = 0;
+  else if (typeScore <= 13) treatmentLevel = 1;
+  else if (typeScore <= 17) treatmentLevel = 2;
+  else treatmentLevel = 3;
+
+  const t = TYPES[dominantType];
+  const tr = TREATMENTS[dominantType][treatmentLevel];
+
+  const stepsHtml = tr.steps.map((s, i) =>
+    `<div class="step-item">
+      <div class="step-num" style="background:${t.color};color:#fff">${i+1}</div>
+      <div class="step-text">${s}</div>
+    </div>`).join('');
+
+  document.getElementById('treatmentCard').innerHTML = `
+    <div class="treatment-card">
+      <div class="treatment-head" style="background:${tr.head_bg}">
+        <div class="treatment-icon" style="background:${tr.icon_bg}">${t.icon}</div>
+        <div class="treatment-head-text">
+          <h3>علاج ${t.name} — مستوى ${tr.level}</h3>
+          <p>من منهج القرآن الكريم والسيرة النبوية</p>
+        </div>
+      </div>
+      <div class="treatment-body">
+        <p class="treatment-text">${tr.text}</p>
+        <div class="aya-box">${tr.aya}</div>
+        <div class="steps">${stepsHtml}</div>
+        <p class="src-tag">📖 المرجع: ${tr.src}</p>
+      </div>
+    </div>`;
+
+  window._resultData = { totalPct, levelName, dominantType: t.name, scores };
+  setTimeout(() => {
+    if (!document.getElementById('toLessonsBtn')) {
+      const btn = document.createElement('button');
+      btn.id = 'toLessonsBtn';
+      btn.innerHTML = '📚 انتقل إلى الدروس ←';
+      btn.style.cssText = 'width:100%;margin:16px 0 0;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;border:none;padding:14px;border-radius:100px;font-family:Tajawal,sans-serif;font-size:15px;font-weight:800;cursor:pointer';
+      btn.onclick = () => { if(loadProfile()){showScreen('lessons');renderLessons();}else{showScreen('register'); initRegister();} };
+      document.querySelector('#result .container').appendChild(btn);
+    }
+  }, 400);
+
+  // After 400ms add "go to lessons" button
+  setTimeout(() => {
+    const existing = document.getElementById('toLessonsBtn');
+    if (!existing) {
+      const btn = document.createElement('button');
+      btn.id = 'toLessonsBtn';
+      btn.className = 'start-btn';
+      btn.style.cssText = 'display:block;width:100%;margin:16px 0 0;font-size:15px;padding:14px';
+      btn.innerHTML = '📚 انتقل إلى الدروس ←';
+      btn.onclick = () => {
+        if (loadProfile()) { showScreen('lessons'); renderLessons(); }
+        else { showScreen('register'); initRegister(); }
+      };
+      document.querySelector('#result .container').appendChild(btn);
+    }
+  }, 500);
+}
+
+function copyResult() {
+  const d = window._resultData;
+  if (!d) return;
+  const text = `نتيجة مقياس الإحباطات الرباعية\n\nالمستوى الإجمالي: ${d.levelName} (${d.totalPct}%)\nالإحباط الأكثر تأثيراً: ${d.dominantType}\n\nمن منهج القرآن الكريم والسيرة النبوية المكية`;
+  navigator.clipboard.writeText(text).then(() => alert('تم النسخ!'));
+}
+
+function shareResult() {
+  const d = window._resultData;
+  if (!d) return;
+  if (navigator.share) {
+    navigator.share({ title: 'مقياس الإحباطات', text: `نتيجتي: ${d.levelName} (${d.totalPct}%) — جرّب أنت!` });
+  } else { copyResult(); }
+}
+
+
+// ══ REGISTRATION — multi-step with result preview ══
+let regData = { gender:'', level:'', goal:'' };
+let regStep = 1;
+
+function initRegister() {
+  regData = { gender:'', level:'', goal:'' };
+  regStep = 1;
+  const d = window._resultData || {};
+  if (d.totalPct !== undefined) {
+    const circ = document.getElementById('regDonut');
+    if (circ) {
+      const offset = 175.9 - (d.totalPct / 100) * 175.9;
+      setTimeout(() => { circ.style.strokeDashoffset = offset; circ.style.transition = 'stroke-dashoffset 1s ease'; }, 300);
+    }
+    const ln = document.getElementById('regLevelName');
+    const ls = document.getElementById('regLevelSub');
+    if (ln) ln.textContent = d.levelName || '';
+    if (ls) ls.textContent = 'إجمالي الإحباط: ' + d.totalPct + '%';
+    ['rb1','rb2','rb3','rb4'].forEach((id, i) => {
+      const el = document.getElementById(id);
+      if (el && d.scores) setTimeout(() => { el.style.width = Math.round((d.scores[i]/20)*100) + '%'; el.style.transition = 'width .8s ease'; }, 400 + i*80);
+    });
+  }
+  goStep(1);
+}
+
+function goStep(n) {
+  regStep = n;
+  for (let i=1; i<=4; i++) {
+    const dot = document.getElementById('dot'+i);
+    if (!dot) continue;
+    dot.className = 'reg-step-dot' + (i < n ? ' done' : i === n ? ' active' : '');
+  }
+  const titles = ['','الخطوة 1 من 4 — معلوماتك الأساسية','الخطوة 2 من 4 — مستواك الديني','الخطوة 3 من 4 — هدفك','الخطوة 4 من 4 — مراجعة وتأكيد'];
+  const t = document.getElementById('regStepTitle');
+  if (t) t.textContent = titles[n] || '';
+  ['regStep1','regStep2','regStep3','regStep4','regSuccess'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.className = 'reg-panel' + (id === 'regStep'+n || (n===5 && id==='regSuccess') ? ' show' : '');
+  });
+  if (n === 4) fillSummary();
+  window.scrollTo(0, 0);
+}
+
+function checkStep1() {
+  const name = (document.getElementById('reg-name') || {}).value || '';
+  const age  = (document.getElementById('reg-age') || {}).value || '';
+  const btn  = document.getElementById('step1Btn');
+  if (btn) btn.disabled = !(name.trim() && age && regData.gender);
+}
+
+function selectGender(btn, val) {
+  regData.gender = val;
+  document.querySelectorAll('#gender-group .sel-card').forEach(b => b.className = 'sel-card');
+  btn.className = 'sel-card active-gender';
+  checkStep1();
+}
+
+function selectLevel(btn, val) {
+  regData.level = val;
+  document.querySelectorAll('#level-group .sel-card').forEach(b => b.className = 'sel-card');
+  btn.className = 'sel-card active-level';
+  const s2 = document.getElementById('step2Btn');
+  if (s2) s2.disabled = false;
+}
+
+function selectGoal(btn, val) {
+  regData.goal = val;
+  document.querySelectorAll('#goal-group .sel-card').forEach(b => b.className = 'sel-card');
+  btn.className = 'sel-card active-goal';
+  const s3 = document.getElementById('step3Btn');
+  if (s3) s3.disabled = false;
+}
+
+function fillSummary() {
+  const name = (document.getElementById('reg-name') || {}).value || '';
+  const age  = (document.getElementById('reg-age') || {}).value || '';
+  const d = window._resultData || {};
+  const set = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
+  set('sum-name', name); set('sum-age', age); set('sum-gender', regData.gender);
+  set('sum-level', regData.level); set('sum-goal', regData.goal);
+  set('sum-result', (d.levelName||'') + (d.totalPct ? ' — '+d.totalPct+'%' : ''));
+  const typeNames = ['الفكري','النفسي','المادي','الخاص'];
+  let scores = d.scores || [0,0,0,0];
+  let dom = scores.indexOf(Math.max(...scores));
+  const levelMap = {'مبتدئ':'ابدأ من الدرسين 1 و 2','متوسط':'ابدأ من الدرس 2 مباشرة','متقدم':'ابدأ من الدرس المرتبط بإحباطك'};
+  set('sum-path', 'التركيز على الإحباط ' + (typeNames[dom]||'') + ' — ' + (levelMap[regData.level]||'مسار مخصص'));
+}
+
+function submitRegister() {
+  const name = (document.getElementById('reg-name')||{}).value.trim();
+  const age  = (document.getElementById('reg-age')||{}).value;
+  const d = window._resultData || {};
+  const profile = {
+    name, age, gender:regData.gender, level:regData.level, goal:regData.goal,
+    totalPct:d.totalPct||0, levelName:d.levelName||'', scores:d.scores||[0,0,0,0],
+    dominantType:d.dominantType||'', quizDate:new Date().toLocaleDateString('ar-SA'),
+    completedLessons:[], reflections:{}, quizBefore:d.scores||[0,0,0,0], quizAfter:null, registeredAt:Date.now(),
+  };
+  try { localStorage.setItem('ihbat_profile', JSON.stringify(profile)); } catch(e){}
+
+  // ── Supabase Save ──
+  (function() {
+    var _SURL = 'https://advndjlmoiuvrsugohpp.supabase.co';
+    var _SKEY = 'sb_publishable_6ml9sJeYvgu7HsbOaIPB0g_ByYY654w';
+    fetch(_SURL + '/rest/v1/quiz_results', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': _SKEY,
+        'Authorization': 'Bearer ' + _SKEY,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        name:          profile.name,
+        age:           profile.age,
+        gender:        profile.gender,
+        level:         profile.level,
+        goal:          profile.goal,
+        total_pct:     profile.totalPct,
+        level_name:    profile.levelName,
+        dominant_type: profile.dominantType,
+        registered_at: profile.registeredAt
+      })
+    }).catch(function(e){ console.error('Supabase error:', e); });
+  })();
+  window._profile = profile;
+  goStep(5);
+  const st = document.getElementById('successTitle');
+  const ss = document.getElementById('successSub');
+  if (st) st.textContent = 'أهلاً بك ' + name + '!';
+  if (ss) ss.textContent = 'تم حفظ ملفك. جارٍ تحضير مسار دروسك المخصص...';
+  setTimeout(() => { showScreen('lessons'); renderLessons(); }, 2000);
+}
+
+function loadProfile() {
+  try { const p=localStorage.getItem('ihbat_profile'); if(p){window._profile=JSON.parse(p);return true;} } catch(e){}
+  return false;
+}
+
+function saveProgress(lessonId) {
+  const p = window._profile; if(!p) return;
+  if(!p.completedLessons.includes(lessonId)) p.completedLessons.push(lessonId);
+  try { localStorage.setItem('ihbat_profile', JSON.stringify(p)); } catch(e){}
+}
+
+function saveReflection(lessonId, text) {
+  const p = window._profile; if(!p) return;
+  if(!p.reflections) p.reflections = {};
+  p.reflections[lessonId] = text;
+  try { localStorage.setItem('ihbat_profile', JSON.stringify(p)); } catch(e){}
+}
+
+
+
+// ── Lessons Data ──
+const LESSONS = [
+  {id:1,title:'لماذا نحتاج منهجاً لمقاومة الإحباطات؟',sub:'السياق التاريخي والمنطلق',src:'الجزء الأول ص1-5',type:'تمهيد',color:'#8b6fd4',icon:'🌅',mins:8,
+   body:'<p>نحن أيها الإخوة، قلنا إن الإسلام جاء والناس في ظلمات، في جاهلية، في ضلال. فأراد الله أن يُخرج الناس من الضلالة إلى الهدى، من الظلمات إلى النور.</p><p style="margin-top:12px">فشرع منهجاً — القرآن الكريم — قال فيه: <strong>"الَر كِتَابٌ أَنزَلْنَاهُ إِلَيْكَ لِتُخْرِجَ النَّاسَ مِنَ الظُّلُمَاتِ إِلَى النُّورِ"</strong>.</p><p style="margin-top:12px">ووصلنا إلى <strong>الخطوة السابعة</strong> — وهي مقاومة الإحباطات التي تعترض طريق كل من سار على هذا المنهج. وقال النبي ﷺ: "عليكم بسنتي وسنة الخلفاء الراشدين المهديين من بعدي".</p>',
+   aya:'"الَر كِتَابٌ أَنزَلْنَاهُ إِلَيْكَ لِتُخْرِجَ النَّاسَ مِنَ الظُّلُمَاتِ إِلَى النُّورِ" — إبراهيم 1',
+   reflection:'ما الذي جعلك تشعر بالإحباط في طريقك؟ اكتب جملة واحدة صادقة.'},
+  {id:2,title:'الرباعية الإحباطية — التعريف والتصنيف',sub:'أربعة أنواع فاتكة وقاتلة',src:'الجزء الثاني ص23-25',type:'نظرية',color:'#5b8dee',icon:'🗺️',mins:10,
+   body:'<p>هذه الإحباطات لها رباعية — أربعة عناصر فاتكة وقاتلة:</p><div style="display:flex;flex-direction:column;gap:10px;margin:14px 0"><div style="padding:12px 16px;background:rgba(91,141,238,0.1);border-right:3px solid #5b8dee;border-radius:0 8px 8px 0"><strong style="color:#5b8dee">1. الإحباطات الفكرية</strong> — تُصيب الفكرة وتزرع الشك في صحة المنهج</div><div style="padding:12px 16px;background:rgba(139,111,212,0.1);border-right:3px solid #8b6fd4;border-radius:0 8px 8px 0"><strong style="color:#8b6fd4">2. الإحباطات النفسية</strong> — تهزّ الثقة بالنفس وتولّد شعور الهوان</div><div style="padding:12px 16px;background:rgba(212,168,67,0.1);border-right:3px solid #d4a843;border-radius:0 8px 8px 0"><strong style="color:#d4a843">3. الإحباطات المادية</strong> — المصائب والضربات المتتالية في الواقع</div><div style="padding:12px 16px;background:rgba(212,101,138,0.1);border-right:3px solid #d4658a;border-radius:0 8px 8px 0"><strong style="color:#d4658a">4. الإحباطات الخاصة</strong> — الضغط الشخصي والاجتماعي المحيط</div></div><p>احفظوا هذه الرباعية، لأننا في كل خطوة سنرجع إليها.</p>',
+   aya:'"ادْعُ إِلَىٰ سَبِيلِ رَبِّكَ بِالْحِكْمَةِ وَالْمَوْعِظَةِ الْحَسَنَةِ" — النحل 125',
+   reflection:'من الأنواع الأربعة، أيها يؤثر فيك أكثر الآن؟ ولماذا؟'},
+  {id:3,title:'الإحباط الفكري — التكذيب من الوجهاء',sub:'حين يكذّبك من تتوقع مصادقته',src:'الجزء الأول ص2-4',type:'فكري',color:'#5b8dee',icon:'🧠',mins:12,
+   body:'<p>من الإحباطات مبدأ أن الإحباط الفكري ينتج حين يُكذَّب الداعية — والمكذّبون ليسوا عوام الناس، بل الوجهاء من الناس، عِلية القوم، أقوى من في المجتمع.</p><p style="margin-top:12px">أبو جهل كان يُنظر إليه في الجاهلية على أنه إنسان حكيم وصاحب عقلية راجحة. فلما جاء الحق والوجهاء رفضوه — يقول من يحمله في نفسه: "عجيب! أنا مخطئ؟"</p><p style="margin-top:12px">وتطور الأمر إلى أن اليهود والنصارى ذهبت إليهم قريش وسألتهم: نحن أهدى أم محمد أهدى؟ فقالوا: أنتم أهدى منه سبيلاً! فازداد الإحباط الفكري عمقاً.</p>',
+   aya:'"قَدْ نَعْلَمُ إِنَّهُ لَيَحْزُنُكَ الَّذِي يَقُولُونَ فَإِنَّهُمْ لَا يُكَذِّبُونَكَ" — الأنعام 33',
+   reflection:'هل مررت بموقف كذّبك فيه شخص محترم أو ذكي؟ كيف أثّر على يقينك؟'},
+  {id:4,title:'المعالجة الفكرية — القرآن وتثبيت اليقين',sub:'إنك على الحق المبين',src:'الجزء الثاني ص34-44',type:'علاج',color:'#2ec4a3',icon:'✨',mins:15,
+   body:'<p>جاء الإسلام بأربع معلومات تثبّت اليقين الفكري:</p><p style="margin-top:12px"><strong>أولاً:</strong> أنت على الحق المبين — "إِنَّكَ عَلَى الْحَقِّ الْمُبِينِ" — وهذه اللفظة لم تأتِ في القرآن كله إلا في هذا الموضع الواحد.</p><p style="margin-top:12px"><strong>ثانياً:</strong> أعداؤك يعرفون أنك على الحق — "فَإِنَّهُمْ لَا يُكَذِّبُونَكَ وَلَٰكِنَّ الظَّالِمِينَ بِآيَاتِ اللَّهِ يَجْحَدُونَ".</p><p style="margin-top:12px"><strong>ثالثاً:</strong> الجحود سببه قاذورات النفوس ومصالحهم، لا الحقيقة.</p><p style="margin-top:12px"><strong>رابعاً:</strong> هذا الرفض سنة تاريخية لا استثناء — "كَذَٰلِكَ مَا أَتَى الَّذِينَ مِن قَبْلِهِم مِّن رَّسُولٍ إِلَّا قَالُوا سَاحِرٌ أَوْ مَجْنُونٌ".</p>',
+   aya:'"إِنَّكَ عَلَى الْحَقِّ الْمُبِينِ" — النمل 79',
+   reflection:'اكتب ثلاثة أشياء تعرفها يقيناً أنها صحيحة في منهجك، بصرف النظر عمن يرفض.'},
+  {id:5,title:'الإحباط النفسي — الهوان والرخص',sub:'حين تشعر أنك لا تساوي شيئاً',src:'الجزء الثالث ص49-51',type:'نفسي',color:'#8b6fd4',icon:'💔',mins:12,
+   body:'<p>الصحابة رضي الله عنهم كان منهم رؤساء عائلاتهم وأغنياؤها — أصبح الواحد منهم لا يساوى شيئاً في عيون الناس. يُضرب، ويُذل.</p><p style="margin-top:12px">وانظر إلى فاطمة الصغيرة — سنّها خمس سنوات — ترى أباها ساجداً عند الكعبة والكفار قد ألقوا على رأسه الأذى. تأتي تبكي وتمسح القاذورات عن وجهه.</p><p style="margin-top:12px">والمسلمون كانوا يرون أنفسهم رخاصاً، وفي المقابل يرون أصحاب الفجور في منتهى الأبهة والعظمة — تقف لهم الناس وتقدرهم. فأصبح الإنسان يرى نفسه رخيصاً.</p>',
+   aya:'"وَكَذَٰلِكَ فَتَنَّا بَعْضَهُم بِبَعْضٍ لِّيَقُولُوا أَهَٰؤُلَاءِ مَنَّ اللَّهُ عَلَيْهِم مِّن بَيْنِنَا" — الأنعام 53',
+   reflection:'في أي موقف شعرت أن الآخرين ينظرون إليك باحتقار بسبب التزامك؟'},
+  {id:6,title:'المعالجة النفسية — القصص القرآني وصناعة القوة',sub:'كرام الخلق كانوا رخاصاً',src:'الجزء الثالث ص52-57',type:'علاج',color:'#2ec4a3',icon:'✨',mins:18,
+   body:'<p>جاء الإسلام يقول للمسلمين: لا صلة منقطعة بين ما يقع بكم وبين الغلاء والرخص. ليس معنى أنك تُذَل أنك رخيص!</p><p style="margin-top:12px">يوسف عليه السلام — النبي الكريم بن الكريم — بيع بدراهم معدودة. موسى كليم الله خرج من مصر مذعوراً جائعاً حافياً. شعيب قيل له: "مَا نَفْقَهُ كَثِيرًا مِّمَّا تَقُولُ وَإِنَّا لَنَرَاكَ فِينَا ضَعِيفًا".</p><p style="margin-top:12px">والمقاييس ستتعدل يوم القيامة تماماً. أهل الجنة يجلسون مع بعضهم ويتحدثون — يقول أحدهم: "كان لي صاحب في الدنيا يسخر مني" — فيذهبون لينظروا فيجدونه في النار!</p>',
+   aya:'"إِنَّ الَّذِينَ أَجْرَمُوا كَانُوا مِنَ الَّذِينَ آمَنُوا يَضْحَكُونَ، فَالْيَوْمَ الَّذِينَ آمَنُوا مِنَ الْكُفَّارِ يَضْحَكُونَ" — المطففين 29، 34',
+   reflection:'اذكر شخصاً من التاريخ الإسلامي كان مهاناً ثم علا — ما الدرس الذي تستخلصه؟'},
+  {id:7,title:'الإحباط المادي — الضربات المتتالية',sub:'لكلّما فتحت باباً جاءتني هزيمة',src:'الجزء الأول ص7-10',type:'مادي',color:'#d4a843',icon:'⚡',mins:10,
+   body:'<p>تطور الأمر إلى إيقاع الأذى الشديد بالمؤمنين. التعذيب الجسدي، الحصار الاقتصادي ثلاث سنوات — أكل المسلمون الصمغ وأوراق الشجر.</p><p style="margin-top:12px">ولكلما أراد النبي ﷺ أن يفتح باباً جديداً جاءته هزيمة جديدة. ذهب إلى الطائف فضربوه وأخرجوه. ذهب إلى الوفود في موسم الحج فرفضوه.</p><p style="margin-top:12px">وبلغ الأمر أن هذه الإحباطات بلغت من النبي ﷺ نفسه ما حكاه القرآن — "لَعَلَّكَ بَاخِعٌ نَّفْسَكَ" — أي ستهلك نفسك من شدة الغم والهم.</p>',
+   aya:'"وَلَنَبْلُوَنَّكُم بِشَيْءٍ مِّنَ الْخَوْفِ وَالْجُوعِ وَنَقْصٍ مِّنَ الْأَمْوَالِ وَالْأَنفُسِ وَالثَّمَرَاتِ وَبَشِّرِ الصَّابِرِينَ" — البقرة 155',
+   reflection:'ما آخر مصيبة أصابتك؟ هل أصابت إيمانك أم جسدك أم وضعك المادي فقط؟'},
+  {id:8,title:'المعالجة المادية — النصر وعد لا أمنية',sub:'الصبر شرط النصر',src:'الجزء الثاني ص48 / الجزء الرابع ص73',type:'علاج',color:'#2ec4a3',icon:'✨',mins:14,
+   body:'<p>الصبر ليس معوقاً للمنهج — بل هو ركن أساسي فيه. طالوت لم ينتصر بجيش كامل — فرز رجاله بالاختبار حتى بقي معه القليل الذي صبر، ثم انتصروا بإذن الله.</p><p style="margin-top:12px">وجاء القرآن ببشارة عظيمة: "إِنَّهُمْ لَهُمُ الْمَنصُورُونَ وَإِنَّ جُندَنَا لَهُمُ الْغَالِبُونَ" — النصر وعد مكتوب لا أمنية.</p><p style="margin-top:12px">وتأمّل كلمة "شَيْءٍ مِّنَ" في آية البلاء — ما يأتيك هو جزء يسير مما يمكن أن يكون. والبلاء وعد مسبق لا عقاب مفاجئ. وانتبه لآخر الآية: "وَبَشِّرِ الصَّابِرِينَ" — البشارة للصابر لا للسالم!</p>',
+   aya:'"وَلَقَدْ سَبَقَتْ كَلِمَتُنَا لِعِبَادِنَا الْمُرْسَلِينَ إِنَّهُمْ لَهُمُ الْمَنصُورُونَ" — الصافات 171-172',
+   reflection:'ما العمل الواحد الصغير الذي تستطيع أن تبدأه اليوم، بصرف النظر عن النتيجة؟'},
+  {id:9,title:'الإحباط الخاص — الضغط الاجتماعي',sub:'حين ينقلب عليك من تتوقع دعمه',src:'الجزء الأول ص6-7',type:'خاص',color:'#d4658a',icon:'👥',mins:10,
+   body:'<p>زرع الكفار الفتن الداخلية في صفوف المسلمين. يذهبون إلى أتباع النبي ﷺ ويقولون لهم: اشتم محمداً ونتركك.</p><p style="margin-top:12px">وأبو طالب — عم الرسول — لما جاءه الموت وأوشك أن يسلم، قالوا له: يا أبا طالب أتشهد على عبد المطلب أنه كان ضالاً؟ فخاف على سمعة أبيه فمات على الكفر.</p><p style="margin-top:12px">والضغط الاجتماعي أعمق أنواع الإحباط — لأنه يأتي من المقربين، من الأسرة، ممن تحبهم.</p>',
+   aya:'"فَاصْبِرْ إِنَّ وَعْدَ اللَّهِ حَقٌّ وَلَا يَسْتَخِفَّنَّكَ الَّذِينَ لَا يُوقِنُونَ" — الروم 60',
+   reflection:'من المقربين منك يضغط عليك أكثر؟ كيف توازن بين محبتهم وثباتك على مبادئك؟'},
+  {id:10,title:'المعالجة بالعمل — إعلان الحق في كل ميدان',sub:'أبو بكر وابن مسعود نموذجاً',src:'الجزء الثالث ص59-72',type:'علاج',color:'#2ec4a3',icon:'✨',mins:16,
+   body:'<p>أول شيء في العمل المطلوب: إعلان الحق دائماً أبداً، بأعلى صوت تستطيعه، وفي كل ميدان.</p><p style="margin-top:12px">عبد الله بن مسعود — كان عبداً يُباع ويُشترى — وقف أول ملقوق يُسمع آذان الكافرين القرآن الكريم. وأبو بكر الصديق لما طُلب منه أن يصلي في الداخل قال: إن رأيت أن أرد عليك جوارك — دعوتي مستمرة.</p><p style="margin-top:12px">والإسلام يفرّق بين معاداة الكفر ومعاداة الكافر. النبي ﷺ كان يدعو لأبي جهل: "اللهم أعز الإسلام بأحب الرجلين إليك". أنت تعادي الفكرة لا الشخص.</p>',
+   aya:'"وَأْمُرْ بِالْمَعْرُوفِ وَانْهَ عَنِ الْمُنكَرِ وَاصْبِرْ عَلَىٰ مَا أَصَابَكَ" — لقمان 17',
+   reflection:'ما الميدان الذي تستطيع فيه إعلان الحق اليوم — في عملك، أسرتك، أو شبكة معارفك؟'},
+  {id:11,title:'مواجهة الإحباطات بالعمل — فرعا العمل',sub:'العمل الذاتي والعمل برد الفعل',src:'الجزء الرابع ص73-90',type:'عمل',color:'#5b8dee',icon:'⚙️',mins:14,
+   body:'<p>الإسلام قال أن العمل فرعان: نوع هو عمل ذاتي تقوم به مهما كان تصرف الذي أمامك. ونوع هو عمل مبني على ردة فعله.</p><p style="margin-top:12px">الفرع الأول — إعلان الحق، الصبر الجميل، التمسك بالمنهج — هذا لا يتغير مهما كان الوضع.</p><p style="margin-top:12px">الفرع الثاني — رد الفعل: إذا كذّبك تفعل هذا، وإذا عذّبك تفعل هذا. كل موقف له استجابة منهجية مختلفة.</p><p style="margin-top:12px">وإياك أن تحسب بعدد المستجيبين — أنت داعية لا حزب سياسي يدخل الانتخابات.</p>',
+   aya:'"فَذَكِّرْ إِن نَّفَعَتِ الذِّكْرَىٰ" — الأعلى 9',
+   reflection:'كيف تتعامل مع شخص يرفض ما تقوله رفضاً تاماً؟ هل لديك منهج واضح؟'},
+  {id:12,title:'خلاصة المنهج — خارطة الطريق الكاملة',sub:'الرباعية + العلاج + العمل = منهج متكامل',src:'الجزء الرابع ص100-107',type:'خلاصة',color:'#c9a96e',icon:'🌟',mins:12,
+   body:'<p>المنهج الكامل الذي تعلمناه يتكوّن من ثلاثة مستويات:</p><div style="display:flex;flex-direction:column;gap:10px;margin:14px 0"><div style="padding:14px 16px;background:rgba(91,141,238,0.1);border-right:3px solid #5b8dee;border-radius:0 8px 8px 0"><strong style="color:#5b8dee">المستوى الأول — المعالجة الفكرية</strong><br><span style="font-size:13px;color:var(--muted)">تثبيت اليقين، فهم أن التكذيب سنة التاريخ</span></div><div style="padding:14px 16px;background:rgba(139,111,212,0.1);border-right:3px solid #8b6fd4;border-radius:0 8px 8px 0"><strong style="color:#8b6fd4">المستوى الثاني — المعالجة النفسية</strong><br><span style="font-size:13px;color:var(--muted)">القصص القرآني، الاصطفاء لا الحقارة</span></div><div style="padding:14px 16px;background:rgba(201,169,110,0.1);border-right:3px solid #c9a96e;border-radius:0 8px 8px 0"><strong style="color:#c9a96e">المستوى الثالث — المعالجة بالعمل</strong><br><span style="font-size:13px;color:var(--muted)">إعلان الحق، العمل الذاتي ورد الفعل</span></div></div><p>وفي اللقاء القادم إن شاء الله، ننتقل إلى الخطوة التالية، ونسأل الله أن يأخذ بأيدينا إليه.</p>',
+   aya:'"إِنَّ هَٰذَا الْقُرْآنَ يَهْدِي لِلَّتِي هِيَ أَقْوَمُ" — الإسراء 9',
+   reflection:'ما أهم شيء تعلمته في هذه الدروس؟ وما الخطوة الأولى التي ستتخذها الآن؟'},
+];
+
+const TYPE_COLORS = {'تمهيد':'#8b6fd4','نظرية':'#5b8dee','فكري':'#5b8dee','نفسي':'#8b6fd4','مادي':'#d4a843','خاص':'#d4658a','علاج':'#2ec4a3','عمل':'#5b8dee','خلاصة':'#c9a96e'};
+
+function renderLessons() {
+  const p = window._profile || {};
+  const name = p.name || 'أهلاً';
+  const completed = p.completedLessons || [];
+  const domType = p.dominantType || '';
+  const pct = Math.round((completed.length / 12) * 100);
+  document.getElementById('lessons-header').innerHTML = `<div style="display:flex;align-items:center;gap:14px;margin-bottom:16px"><div style="width:48px;height:48px;border-radius:50%;background:rgba(201,169,110,0.2);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">${name.charAt(0)||'👤'}</div><div><div style="font-size:18px;font-weight:900">مرحباً، ${name}</div><div style="font-size:12px;color:var(--muted);margin-top:2px">نوع إحباطك الأساسي: <span style="color:var(--accent);font-weight:700">${domType}</span></div></div></div>`;
+  document.getElementById('lessons-progress-bar').style.width = pct + '%';
+  document.getElementById('lessons-progress-txt').textContent = completed.length + ' / 12';
+  let recLesson = LESSONS[0];
+  if (domType.includes('فكري')) recLesson = LESSONS[2];
+  else if (domType.includes('نفسي')) recLesson = LESSONS[4];
+  else if (domType.includes('مادي')) recLesson = LESSONS[6];
+  else if (domType.includes('خاص')) recLesson = LESSONS[8];
+  if (!completed.includes(recLesson.id)) {
+    document.getElementById('recommended-lesson').innerHTML = `<div style="background:rgba(201,169,110,0.1);border:1.5px solid rgba(201,169,110,0.4);border-radius:14px;padding:16px;cursor:pointer;margin-bottom:16px" onclick="openLesson(${recLesson.id})"><div style="font-size:11px;color:var(--accent);font-weight:700;margin-bottom:8px">⭐ الدرس المقترح لنوع إحباطك</div><div style="display:flex;align-items:center;gap:12px"><div style="font-size:28px">${recLesson.icon}</div><div><div style="font-size:14px;font-weight:700">${recLesson.title}</div><div style="font-size:12px;color:var(--muted);margin-top:3px">${recLesson.sub}</div></div></div></div>`;
+  } else { document.getElementById('recommended-lesson').innerHTML = ''; }
+  const groups=[{label:'التمهيد والنظرية',ids:[1,2]},{label:'الإحباط الفكري وعلاجه',ids:[3,4]},{label:'الإحباط النفسي وعلاجه',ids:[5,6]},{label:'الإحباط المادي وعلاجه',ids:[7,8]},{label:'الإحباط الخاص وعلاجه',ids:[9,10]},{label:'العمل والخلاصة',ids:[11,12]}];
+  let html='';
+  groups.forEach(g=>{
+    html+=`<div style="margin-bottom:16px"><div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px">${g.label}</div><div style="display:flex;flex-direction:column;gap:8px">`;
+    g.ids.forEach(id=>{
+      const L=LESSONS.find(l=>l.id===id);
+      const done=completed.includes(id);
+      const col=TYPE_COLORS[L.type]||'#888';
+      html+=`<div onclick="openLesson(${id})" style="background:var(--surface);border:1.5px solid ${done?col:'var(--border)'};border-radius:12px;padding:14px 16px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:all .2s" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background='var(--surface)'"><div style="width:38px;height:38px;border-radius:10px;background:${done?col+'33':'var(--surface2)'};display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">${done?'✅':L.icon}</div><div style="flex:1"><div style="font-size:13px;font-weight:700;color:${done?col:'var(--text)'}">${L.title}</div><div style="font-size:11px;color:var(--muted);margin-top:2px">${L.mins} دقائق • ${L.src}</div></div><div style="font-size:10px;font-weight:600;padding:3px 8px;border-radius:20px;background:${col}22;color:${col}">${L.type}</div></div>`;
+    });
+    html+='</div></div>';
+  });
+  document.getElementById('lessons-list').innerHTML = html;
+}
+
+function openLesson(id) {
+  const L=LESSONS.find(l=>l.id===id);if(!L)return;
+  const p=window._profile||{};
+  const done=(p.completedLessons||[]).includes(id);
+  const col=TYPE_COLORS[L.type]||'#888';
+  let savedRef='';try{savedRef=localStorage.getItem('ihbat_ref_'+id)||'';}catch(e){}
+  document.getElementById('lesson-content').innerHTML=`
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:20px">
+      <div style="width:52px;height:52px;border-radius:14px;background:${col}22;display:flex;align-items:center;justify-content:center;font-size:26px">${L.icon}</div>
+      <div><div style="font-size:10px;font-weight:700;color:${col};margin-bottom:4px">${L.type} • ${L.mins} دقائق</div><h1 style="font-size:17px;font-weight:900;line-height:1.3">${L.title}</h1><div style="font-size:11px;color:var(--muted);margin-top:3px">${L.src}</div></div>
+    </div>
+    <div style="font-size:14px;line-height:1.85;color:rgba(240,238,234,.88)">${L.body}</div>
+    <div style="margin-top:20px;padding:14px 16px;background:rgba(201,169,110,0.1);border-right:3px solid var(--accent);border-radius:0 10px 10px 0">
+      <div style="font-size:11px;font-weight:700;color:var(--accent);margin-bottom:6px">الآية الكريمة</div>
+      <div style="font-size:13px;line-height:1.8;color:var(--accent);font-weight:600">${L.aya}</div>
+    </div>
+    <div style="margin-top:16px;padding:14px 16px;background:var(--surface);border:1px solid var(--border);border-radius:10px">
+      <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px">💭 سؤال للتأمل والتطبيق</div>
+      <div style="font-size:13px;color:var(--text);line-height:1.7;margin-bottom:12px">${L.reflection}</div>
+      <textarea id="reflection-${id}" rows="3" placeholder="اكتب إجابتك هنا..."
+        style="width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--text);font-family:Tajawal,sans-serif;font-size:13px;resize:none;direction:rtl;outline:none">${savedRef}</textarea>
+    </div>
+    ${done?`<div style="margin-top:16px;text-align:center;color:var(--teal);font-size:14px;font-weight:700">✅ أتممت هذا الدرس بالفعل</div>`:`<button id="complete-btn-${id}" onclick="completeLesson(${id})" style="width:100%;margin-top:16px;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#fff;border:none;padding:14px;border-radius:100px;font-family:Tajawal,sans-serif;font-size:15px;font-weight:800;cursor:pointer">✓ أتممت هذا الدرس</button>`}
+    <div style="margin-top:12px;text-align:center;font-size:11px;color:var(--muted)">الدرس ${id} من 12</div>`;
+  showScreen('lesson-detail');
+}
+
+function completeLesson(id) {
+  try{const ta=document.getElementById('reflection-'+id);if(ta&&ta.value.trim())localStorage.setItem('ihbat_ref_'+id,ta.value.trim());}catch(e){}
+  saveProgress(id);
+  const btn=document.getElementById('complete-btn-'+id);
+  if(btn){btn.style.background='rgba(46,196,163,0.2)';btn.style.color='var(--teal)';btn.textContent='✅ تم! أحسنت';btn.disabled=true;}
+  setTimeout(()=>{showScreen('lessons');renderLessons();},1200);
+}
+
+function restart() {
+  current = 0;
+  answers = new Array(20).fill(null);
+  showScreen('intro');
+}
+</script>
+
+<!-- ══ LESSONS ══ -->
+<div id="lessons" class="screen">
+  <div class="container" style="padding:24px 20px 60px">
+
+    <div id="lessons-header" style="margin-bottom:20px"></div>
+
+    <div style="margin-bottom:20px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <span style="font-size:12px;color:var(--muted)">تقدمك في الدروس</span>
+        <span id="lessons-progress-txt" style="font-size:12px;font-weight:700;color:var(--accent)">0 / 12</span>
+      </div>
+      <div style="height:6px;background:var(--surface2);border-radius:3px;overflow:hidden">
+        <div id="lessons-progress-bar" style="height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:3px;transition:width .6s ease;width:0%"></div>
+      </div>
+    </div>
+
+    <div id="recommended-lesson" style="margin-bottom:16px"></div>
+    <div id="lessons-list"></div>
+
+    <button onclick="showScreen('result')" style="width:100%;margin-top:20px;background:var(--surface);border:1px solid var(--border);color:var(--muted);padding:12px;border-radius:100px;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s">← عودة إلى النتيجة</button>
+  </div>
+</div>
+
+<!-- ══ LESSON DETAIL ══ -->
+<div id="lesson-detail" class="screen">
+  <div class="container" style="padding:24px 20px 60px">
+    <div id="lesson-content"></div>
+    <button onclick="showScreen('lessons');renderLessons()" style="width:100%;margin-top:24px;background:var(--surface);border:1px solid var(--border);color:var(--muted);padding:12px;border-radius:100px;font-family:'Tajawal',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s">← العودة إلى الدروس</button>
+  </div>
+</div>
+
+</body>
+</html>
