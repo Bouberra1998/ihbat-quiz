@@ -514,6 +514,18 @@ body::before {
     </div>
 
     <button class="start-btn" onclick="startQuiz()">ابدأ الاختبار الآن</button>
+    <div style="margin-top:20px;display:flex;flex-direction:column;align-items:center;gap:8px">
+      <input id="restore-name" type="text" placeholder="أدخل اسمك لاسترجاع تقدمك..."
+        style="background:#161920;border:1px solid #333;border-radius:50px;padding:11px 20px;
+        color:#f0eeea;font-family:Tajawal,sans-serif;font-size:14px;direction:rtl;
+        outline:none;width:100%;max-width:300px;text-align:center;box-sizing:border-box">
+      <button id="restore-btn" onclick="restoreProgress()"
+        style="background:transparent;border:1px solid #c9a96e;color:#c9a96e;
+        padding:10px 28px;border-radius:50px;font-family:Tajawal,sans-serif;
+        font-size:13px;cursor:pointer">
+        🔄 استرجع تقدمك
+      </button>
+    </div>
     <p class="intro-note">5 دقائق فقط — أداة توعوية وليست تشخيصاً نفسياً طبياً</p>
   </div>
 </div>
@@ -1396,6 +1408,46 @@ function submitRegister() {
 function loadProfile() {
   try { const p=localStorage.getItem('ihbat_profile'); if(p){window._profile=JSON.parse(p);return true;} } catch(e){}
   return false;
+}
+
+async function loadProfileFromSupabase(name) {
+  var _SURL = 'https://advndjlmoiuvrsugohpp.supabase.co';
+  var _SKEY = 'ضع_مفتاحك_هنا';
+  try {
+    const res = await fetch(
+      _SURL + '/rest/v1/quiz_results?name=eq.' + encodeURIComponent(name) + '&order=registered_at.desc&limit=1',
+      { headers: { 'apikey': _SKEY, 'Authorization': 'Bearer ' + _SKEY } }
+    );
+    const data = await res.json();
+    if (data && data.length > 0) {
+      const r = data[0];
+      window._profile = {
+        name: r.name, age: r.age, gender: r.gender,
+        level: r.level, goal: r.goal,
+        totalPct: r.total_pct, levelName: r.level_name,
+        dominantType: r.dominant_type,
+        completedLessons: [], reflections: {}
+      };
+      try { localStorage.setItem('ihbat_profile', JSON.stringify(window._profile)); } catch(e){}
+      return true;
+    }
+  } catch(e) { console.error('Supabase load:', e); }
+  return false;
+}
+
+async function restoreProgress() {
+  const nameEl = document.getElementById('restore-name');
+  const name = nameEl ? nameEl.value.trim() : '';
+  if (!name) { alert('أدخل اسمك أولاً'); return; }
+  const btn = document.getElementById('restore-btn');
+  if (btn) { btn.textContent = '...جاري البحث'; btn.disabled = true; }
+  const found = await loadProfileFromSupabase(name);
+  if (found) {
+    showScreen('lessons'); renderLessons();
+  } else {
+    if (btn) { btn.textContent = '🔄 استرجع تقدمك'; btn.disabled = false; }
+    alert('لم يُعثر على حساب بهذا الاسم');
+  }
 }
 
 function saveProgress(lessonId) {
