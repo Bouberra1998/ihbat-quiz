@@ -622,7 +622,7 @@ body::before {
   <!-- الخطوة 1: المعلومات الأساسية -->
   <div class="reg-panel show" id="regStep1">
     <div>
-      <label class="reg-field-label">الاسم الأول</label>
+      <label class="reg-field-label">الاسم الأول مع رمز خاص بك</label>
       <input id="reg-name" type="text" placeholder="محمد / فاطمة ..." maxlength="30" class="reg-input"
         oninput="checkStep1()">
     </div>
@@ -1438,7 +1438,7 @@ async function loadProfileFromSupabase(name) {
 async function restoreProgress() {
   const nameEl = document.getElementById('restore-name');
   const name = nameEl ? nameEl.value.trim() : '';
-  if (!name) { alert('أدخل اسمك أولاً'); return; }
+  if (!name) { alert('أدخل اسمك الخاص أولاً'); return; }
   const btn = document.getElementById('restore-btn');
   if (btn) { btn.textContent = '...جاري البحث'; btn.disabled = true; }
   const found = await loadProfileFromSupabase(name);
